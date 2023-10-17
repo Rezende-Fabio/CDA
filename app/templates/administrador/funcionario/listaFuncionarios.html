@@ -48,8 +48,6 @@
         <div class="tabela p-3">
             <div id="lista-funcionarios"></div>
         </div>
-        <!-- <input type="text" id="filter-text-box" placeholder="Filter..." oninput="onFilterTextBoxChanged()">
-        <div id="myGrid" class="ag-theme-alpine"></div> -->
     </div>
 </section>
 {% endblock %}
@@ -71,32 +69,4 @@
         suppressPaginationPanel: true,
     }).render(document.getElementById("lista-funcionarios"));
 </script>
-<!-- <script>
-
-    // let the grid know which columns and what data to use
-    const gridOptions = {
-        defaultColDef: {
-            sortable: true,
-            filter: true,
-            flex: 1,
-            minWidth: 100,
-        },
-        columnDefs: colunasFunc,
-        rowData: dadosFunc,
-        pagination: true,
-        paginationAutoPageSize: true,
-        cacheQuickFilter: true,
-        domLayout: 'autoHeight',
-        paginationPageSize: 10
-    };
-
-    function onFilterTextBoxChanged() {
-        gridOptions.api.setQuickFilter(
-            document.getElementById('filter-text-box').value
-        );
-    }
-
-    const gridDiv = document.querySelector('#myGrid');
-    new agGrid.Grid(gridDiv, gridOptions);
-</script>  -->
 {% endblock %}

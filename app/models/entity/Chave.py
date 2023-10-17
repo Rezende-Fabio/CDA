@@ -19,7 +19,7 @@ class Chave:
         self._id = id
         self._codigo = codigo
         self._nome = nome
-        self._ativo = ativo
+        self._inativo = ativo
         self._delete = delete
 
     @property
@@ -48,11 +48,11 @@ class Chave:
 
     @property
     def ativo(self) -> str:
-        return self._ativo
+        return self._inativo
     
     @ativo.setter
     def ativo(self, ativo: str) -> None:
-        self._ativo = ativo
+        self._inativo = ativo
         
     @property
     def delete(self) -> str:
@@ -67,7 +67,7 @@ class Chave:
             "id": self._id,
             "codigo": self._codigo,
             "nome": self._nome,
-            "ativo": self._ativo,
+            "ativo": self._inativo,
             "delete": self._delete
         }
 

@@ -16,15 +16,15 @@
                                 <h6 class="msg-alert">Observação precisa ter mais que 15 caracteres.</h6>
                             </div>
                             <div class="mb-3">
-                                <span class="msg-obs">Deseja realmente excluir a visíta do(a) terceiro {{ context.movimento.terceiro.nome }} ?</span>
+                                <span class="msg-obs">Deseja realmente excluir a visíta do terceiro {{ context.movimento.terceiro.nome }} ?</span>
                             </div>
                             <input class="d-none" type="text" name="idExcluir" id="idExcluir" value="{{ context.movimento.id }}">
                             <input class="d-none" type="text" name="crachaPessoaVisit" id="crachaPessoaVisit" value="{{ context.movimento.pessoaVisit.cracha }}">
+                            <span class="alert-inoformacao">Entrada: {{ context.movimento.dataEnt | dataLimite }} {{ context.movimento.horaEnt }} - Saída: {{ context.movimento.dataSai | dataLimite }} {{ context.movimento.horaSai }}</span>
                             {% if session.grupo != 'ADM' %}
-                                <div class="row">
-                                    <span class="obs-alert">* Observação deve ser preenchida</span>
+                                <div class="row mt-2">
                                     <div class="col">
-                                        <label for="">Observação:</label>
+                                        <label for="">Observação:</label>  <span class="obs-alert">* Observação deve ser preenchida</span>
                                         <textarea class="form-control upper" id="observacaoExcluir" name="observacaoExcluir" rows="3" cols="50" maxlength="120"></textarea>
                                     </div>
                                 </div>

@@ -1,8 +1,8 @@
 {% extends "public/base.html" %}
-{% block content %}
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleUsuarios.css') }}">
 {% endblock %}
+{% block content %}
 {% include "public/header.html" %}
 <section class="content">
     <div class="container-fluid p-2"> 
@@ -18,11 +18,11 @@
                     <label for="">Nome:</label>
                     <input type="text" name="nome" id="nome" class="form-control upper" maxlength="45" autocomplete="off" tabindex="1" value="{% if context.funcionario %}{{ context.funcionario.nome }}{% endif %}" required>
                 </div>
-                <div class="col-3">
+                <div class="col-2">
                     <label for="">Crachá:</label>
                     <input type="text" name="cracha" id="cracha" class="form-control upper" maxlength="6" autocomplete="off" tabindex="2" value="{% if context.funcionario %}{{ context.funcionario.cracha }}{% endif %}" required>
                 </div>
-                <div class="col-5">
+                <div class="col-4">
                     <label for="">Máquina:</label>
                     <input type="text" name="maquina" id="maquina" class="form-control upper" maxlength="20" autocomplete="off" tabindex="3" value="{% if context.funcionario %}{{ context.funcionario.maquina }}{% endif %}">
                 </div>
@@ -49,7 +49,7 @@
         </form>
     </div>
 </section>
+{% endblock %}
 {% block script %}
 <script src="{{ url_for('static', filename='js/funcionario/funcoes.js') }}"></script>
-{% endblock %}
 {% endblock %}

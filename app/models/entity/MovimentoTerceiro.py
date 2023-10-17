@@ -156,7 +156,7 @@ class MovimentoTerceiro:
             "id": self._id,
             "dataEnt": self._dataEnt,
             "horaEnt": self._horaEnt,
-            "tercerio": self.terceiro.toJson(),
+            "terceiro": self.terceiro.toJson(),
             "placa": self._placa,
             "veiculo": self._veiculo,
             "motivo": self._motivo,

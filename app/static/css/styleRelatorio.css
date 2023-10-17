@@ -39,13 +39,29 @@
     position: table-footer-group !important;
 }
 
+.area-btns {
+    justify-content: end;
+    width: 100%;
+    align-items: center;
+    display: flex;
+    position: fixed;
+    bottom: 0.2rem;
+    padding: 10px;
+}
+
 #btns {
     justify-content: space-between;
+    width: 30%;
     margin: 1rem;
     align-items: center;
     display: flex;
+    position: fixed;
+    bottom: 0.2rem;
+    background-color: #afafaf;
+    padding: 10px;
+    border-radius: 10px;
+    box-shadow: 6px 3px 3px  rgba(0, 0, 0, 0.5);
 }
-
 
 @media print {
     @page {

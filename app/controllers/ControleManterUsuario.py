@@ -123,9 +123,10 @@ class ControleManterUsuario:
         :param id: O ID do usuário a ser excluído.
 
         :return: Um código de retorno indicando o resultado da ação:
-            - 1: Tentativa de excluir o próprio usuário logado.
-            - 2: usuário excluído com sucesso.
-            - 3: usuário inativado (quando usuário tem movimentação no sistema).
+            - 1: tentativa de excluir o usuário ADMIN
+            - 2: tentativa de excluir o próprio usuário logado.
+            - 3: usuário excluído com sucesso.
+            - 4: usuário inativado (quando usuário tem movimentação no sistema).
         """
 
         manterUsuarioDao = ManterUsuarioDao()
@@ -139,18 +140,20 @@ class ControleManterUsuario:
         self.usuarioLogado.id = consultaIdUser.consultaIdUserLogado(session["usuario"])
         
         #Verifica se o usuário selecionado é o mesmo que o usuário logado
-        if id == self.usuarioLogado.id:
+        if id == 1:
             return 1
+        elif id == self.usuarioLogado.id:
+            return 2
         else:
             if verificaMovimentoDao.verificaMovimentoUsuario(id):
                 if manterUsuarioDao.inativarUsuario(id):
                     self.geraLogUsuario("ACTIVE")
-                    return 3
+                    return 4
                 
             else:
                 if manterUsuarioDao.excluirUsuario(id):
                     self.geraLogUsuario("DELETE")
-                    return 2
+                    return 3
 
 
     def geraLogUsuario(self, acao: str) -> None:

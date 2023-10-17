@@ -2,14 +2,14 @@ from .Funcionario import Funcionario
 from .Chave import Chave
 from typing import Optional
 
-"""
-Classe Movimento Chave
-@author - Fabio
-@version - 1.0
-@since - 19/06/2023
-"""
-
 class MovimentoChave:
+    """
+    Classe Movimento Chave
+    @author - Fabio
+    @version - 1.0
+    @since - 19/06/2023
+    """
+
     id: int
     dataRet: str
     horaRet: str

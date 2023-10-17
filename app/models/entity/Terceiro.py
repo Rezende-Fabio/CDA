@@ -21,7 +21,7 @@ class Terceiro:
         self._codigo = codigo
         self._nome = nome
         self._cpf = cpf
-        self._ativo = ativo
+        self._inativo = ativo
         self._delete = delete
 
     @property
@@ -58,11 +58,11 @@ class Terceiro:
 
     @property
     def ativo(self) -> str:
-        return self._ativo
+        return self._inativo
     
     @ativo.setter
     def ativo(self, ativo: str) -> None:
-        self._ativo = ativo
+        self._inativo = ativo
         
     @property
     def delete(self) -> str:
@@ -78,7 +78,7 @@ class Terceiro:
             "codigo": self._codigo,
             "nome": self._nome,
             "cpf": self._cpf,
-            "ativo": self._ativo,
+            "ativo": self._inativo,
             "delete": self._delete
         }
 

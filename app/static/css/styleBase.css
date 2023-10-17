@@ -179,3 +179,7 @@ a.ui-button:active,
     background-color: #a1a1a1;
     padding: 2px 2px 2px 5px;
 }
+
+input{
+    text-transform: uppercase !important;
+}

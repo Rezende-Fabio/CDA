@@ -21,7 +21,7 @@ class SysUser(UserMixin, DB.Model):
     us_hashNovaSenha = Column(String(10), nullable=False)
     us_novaSenha = Column(Boolean, nullable=False)
     us_limiteNovasenha = Column(String(30), nullable=False)
-    us_ativo = Column(Boolean, nullable=False)
+    us_inativo = Column(Boolean, nullable=False)
     us_delete = Column(Boolean, nullable=False)
     
     def __init__(self, nome: str, email: str, usuario: str, senha: str, grupo: str, complex: str, hashNovaSenha: str, senhaNova: bool, limiteNovaSenha, ativo: bool, delete: bool):
@@ -35,7 +35,7 @@ class SysUser(UserMixin, DB.Model):
         self.us_hashNovaSenha = hashNovaSenha
         self.us_novaSenha = senhaNova
         self.us_limiteNovasenha = limiteNovaSenha
-        self.us_ativo = ativo
+        self.us_inativo = ativo
         self.us_delete = delete
 
 
@@ -44,14 +44,14 @@ class CDA005(DB.Model):
     id_chave = Column(Integer, primary_key=True, nullable=False)
     ch_codigo = Column(String(6), nullable=False)
     ch_nome = Column(String(30), nullable=False)
-    ch_ativo = Column(Boolean, nullable=False)
+    ch_inativo = Column(Boolean, nullable=False)
     ch_delete = Column(Boolean, nullable=False)
 
     def __init__(self, codigo: str, nome: str, ativo: bool, delete: bool):
         #Função para instanciar um objeto para adcionar no banco
         self.ch_codigo = codigo
         self.ch_nome = nome
-        self.ch_ativo = ativo
+        self.ch_inativo = ativo
         self.ch_delete = delete
 
 
@@ -103,7 +103,7 @@ class CDA007(DB.Model):
     fu_nome = Column(String(45), nullable=False)
     fu_maquina = Column(String(20))
     fu_gerente = Column(Boolean)
-    fu_ativo = Column(Boolean, nullable=False)
+    fu_inativo = Column(Boolean, nullable=False)
     fu_delete = Column(Boolean, nullable=False)
 
     def __init__(self, cracha: str, nome: str, ativo: bool, delete: bool, gerente: bool, maquina: str):
@@ -112,7 +112,7 @@ class CDA007(DB.Model):
         self.fu_nome = nome
         self.fu_maquina = maquina
         self.fu_gerente = gerente
-        self.fu_ativo = ativo
+        self.fu_inativo = ativo
         self.fu_delete = delete
     
 
@@ -157,10 +157,10 @@ class CDA006(DB.Model):
 #Tabela de Terceiro
 class CDA009(DB.Model):
     id_terceiro = Column(Integer, primary_key=True, nullable=False)
-    te_codigo = Column(String(6), nullable=False)
+    te_codigo = Column(String(8), nullable=False)
     te_nome = Column(String(45), nullable=False)
     te_cpf = Column(String(11), nullable=False)
-    te_ativo = Column(Boolean, nullable=False)
+    te_inativo = Column(Boolean, nullable=False)
     te_delete = Column(Boolean, nullable=False)
 
     def __init__(self, codigo: str, nome: str, cpf: str, ativo: bool, delete: bool):
@@ -168,7 +168,7 @@ class CDA009(DB.Model):
         self.te_codigo = codigo
         self.te_nome = nome
         self.te_cpf = cpf
-        self.te_ativo = ativo
+        self.te_inativo = ativo
         self.te_delete = delete
 
 

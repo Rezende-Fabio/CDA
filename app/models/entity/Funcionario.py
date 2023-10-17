@@ -24,7 +24,7 @@ class Funcionario:
         self._cracha = cracha
         self._maquina = maquina
         self._gerente = gerente
-        self._ativo = ativo
+        self._inativo = ativo
         self._delete = delete
 
     @property
@@ -69,11 +69,11 @@ class Funcionario:
     
     @property
     def ativo(self) -> bool:
-        return self._ativo
+        return self._inativo
     
     @ativo.setter
     def ativo(self, ativo):
-        self._ativo = ativo
+        self._inativo = ativo
     
     @property
     def delete(self) -> bool:
@@ -91,7 +91,7 @@ class Funcionario:
             "cracha": self._cracha,
             "maquina": self._maquina,
             "gerente": self._gerente,
-            "ativo": self._ativo,
+            "ativo": self._inativo,
             "delete": self._delete
         }
 

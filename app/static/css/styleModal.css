@@ -102,3 +102,9 @@ section.modal-alert {
     color: #910000;
     margin-bottom: 0.5rem;
 }
+
+.alert-inoformacao{
+    font-size: 15px;
+    color: #910000;
+    font-weight: 500;
+}

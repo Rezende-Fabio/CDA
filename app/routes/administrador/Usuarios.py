@@ -101,8 +101,10 @@ def deleteUsuarioAdm(id):
         controleManterUsuario = ControleManterUsuario()
         respControle = controleManterUsuario.excluirUsuario(int(id))
         if respControle == 1:
-            flash("Usuário logado não pode ser excluido", "danger")
+            flash("O usuário ADMIN não pode ser excluido!", "danger")
         elif respControle == 2:
+            flash("Usuário logado não pode ser excluido!", "danger")
+        elif respControle == 3:
             flash("Usuário excluido com sucesso!", "success")
         else:
             flash("Usuário possue movimentação no sistema, então foi desativado", "success")

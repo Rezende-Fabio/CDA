@@ -1,14 +1,14 @@
 from .Funcionario import Funcionario
 from typing import Optional
 
-"""
-Classe Movimento Gerente
-@author - Fabio
-@version - 1.0
-@since - 11/08/2023
-"""
-
 class MovimentoGerente:
+    """
+    Classe Movimento Gerente
+    @author - Fabio
+    @version - 1.0
+    @since - 11/08/2023
+    """
+
     id: int
     dataEnt: str
     horaEnt: str

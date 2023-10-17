@@ -19,11 +19,11 @@
                                 <span class="msg-obs">Deseja realmente excluir a retirada/devolução da chave {{ context.movimento.chave.nome }} ?</span>
                             </div>
                             <input class="d-none" type="text" name="idExcluir" id="idExcluir" value="{{ context.movimento.id }}">
+                            <span class="alert-inoformacao">Retirada: {{ context.movimento.dataRet | dataLimite }} {{ context.movimento.horaRet }} - Devolução: {{ context.movimento.dataDev | dataLimite }} {{ context.movimento.horaDev }}</span>
                             {% if session.grupo != 'ADM' %}
-                                <div class="row">
-                                    <span class="obs-alert">* Observação deve ser preenchida</span>
+                                <div class="row mt-2">
                                     <div class="col">
-                                        <label for="">Observação:</label>
+                                        <label for="">Observação:</label>  <span class="obs-alert">* Observação deve ser preenchida</span>
                                         <textarea class="form-control upper" id="observacaoExcluir" name="observacaoExcluir" rows="3" cols="50" maxlength="120"></textarea>
                                     </div>
                                 </div>

@@ -36,7 +36,7 @@ class Usuario:
         self._usuario = usuario
         self._senha = senha
         self._complex = complex
-        self._ativo = ativo
+        self._inativo = ativo
         self._delete = delete
         self._senhaCompara = senhaCompara
         self._senhaNova = senhaNova
@@ -101,11 +101,11 @@ class Usuario:
     
     @property
     def ativo(self) -> bool:
-        return self._ativo
+        return self._inativo
     
     @ativo.setter
     def ativo(self, ativo: bool) -> None:
-        self._ativo = ativo
+        self._inativo = ativo
     
     @property
     def delete(self) -> bool:
@@ -156,7 +156,6 @@ class Usuario:
         
 
     def verificarSenha(self) -> bool:
-        print(self._senha)
         hash = bcrypt.hashpw(self._senha.encode('utf-8'), bytes(self._complex, 'utf-8'))
         if hash.decode('utf-8') == self._senhaCompara:
             return True
@@ -173,15 +172,11 @@ class Usuario:
             "senha": self._senha,
             "grupo": self._grupo,
             "complex": self._complex,
-            "ativo": self._ativo,
+            "ativo": self._inativo,
             "delete": self._delete
         }
 
         return json
-    
-
-    def toUsuario(self, dic: dict):
-        pass
 
 
     def gerarHashSenhaNova(self):
