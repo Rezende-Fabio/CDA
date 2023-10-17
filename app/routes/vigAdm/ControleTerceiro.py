@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, redirect, request, Response, jsonify, session, url_for, abort, flash
 from ...controllers.ControleConsultaParametros import ControleConsultaParametros
+from ...controllers.ControleManterTerceiro import ControleManterTerceiro
 from ...controllers.ControleTerceiro import ControleTerceiro
 from ...extensions.LogErro import LogErro
 from flask_login import login_required
@@ -35,8 +36,10 @@ def incluirEntradaTerc():
         if session["loginVig"] or session["grupo"] == "ADM": #Verifica se o usuário está tentando acessar a pagina usando a URL
             constroleConsultaParametros = ControleConsultaParametros()
             qtdeAcomps = constroleConsultaParametros.consultaParametros("PAR_QTDE_ACOMPS")
+            controleManterTerceiro = ControleManterTerceiro()
+            codigo = controleManterTerceiro.incrementaCodigoTerc()
             data = datetime.now()
-            context = {"titulo": "Entrada de Terceiro", "active": "controlTerc", "data": data, "qtdeAcomps": qtdeAcomps}
+            context = {"titulo": "Entrada de Terceiro", "active": "controlTerc", "data": data, "qtdeAcomps": qtdeAcomps, "codigo": codigo}
             return render_template("vigAdm/controleTerceiro/incluirMovimentoTerceiro.html", context=context)
         else:
             if session["grupo"] == "ADM":
@@ -58,7 +61,7 @@ def insertEntradaTerc():
     try:
         dataJson = request.get_json()
         controleTerceiro = ControleTerceiro()
-        controleTerceiro.inserirEntrada(dataJson["cpf"], dataJson["nome"], dataJson["empresa"], dataJson["placa"], dataJson["veiculo"], dataJson["motivo"], dataJson["pessoaVisit"], dataJson["dtEntrada"], dataJson["hrEntrada"], dataJson["acomps"])
+        controleTerceiro.inserirEntrada(dataJson["cpf"], dataJson["nome"], dataJson["empresa"], dataJson["placa"], dataJson["veiculo"], dataJson["motivo"], dataJson["pessoaVisit"], dataJson["dtEntrada"], dataJson["hrEntrada"], dataJson["acomps"], dataJson["codigoTerc"])
         flash("Entrada de terceiro incluida com sucesso!", "success")
         resp = Response(response=json.dumps({"success": True}), status=200, mimetype="application/json")
         return resp
@@ -102,7 +105,7 @@ def insertSaidaTerc():
     try:
         data = request.get_json()
         controleTerceiro = ControleTerceiro()
-        controleTerceiro.inserirSaida(int(data["idMov"]), data["dataSaid"], data["horaSaid"], data["cpf"], data["acomps"], data["cracha"])
+        controleTerceiro.inserirSaida(int(data["idMov"]), data["dataSaid"], data["horaSaid"], data["cpf"], data["acomps"], data["cracha"], data["codigo"])
         flash("Saída incluida com sucesso!", "success")
         resp = Response(response=json.dumps({"success": True}), status=200, mimetype="application/json")
         return resp

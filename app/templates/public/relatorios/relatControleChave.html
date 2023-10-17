@@ -10,8 +10,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='plugins/bootstrap/css/bootstrap.min.css') }}">
 
     <style>
-        page-number::after {
-            content: counter(page);
+        @page{
+            size: landscape !important;
         }
     </style>
 </head>
@@ -23,7 +23,7 @@
                 <img class="" src="{{ url_for('static', filename='img/logo6.png') }}" id="icon" alt="User Icon" />
             </div>
             <div class="titulo">
-                <label>Controle de Chaves</label>
+                <label>RELATÓRIO DE ENTREGA DAS CHAVES</label>
                 <label>de {{ context.de | dataLimite }} até {{ context.ate | dataLimite }}</label>
             </div>
             <div class="hora">
@@ -32,31 +32,6 @@
             </div>
         </div>
     </header>
-    <!-- <header>
-        <div class="hearder">
-            <table class="table">
-                <tr style="border-bottom: none; height: 88px;">
-                    <th style="border-bottom: none; height: 88px;">
-                        <div class="img">
-                            <img src="{{ url_for('static', filename='img/logo6.png') }}" id="icon" alt="User Icon" />
-                        </div>
-                    </th>
-                    <th style="border-bottom: none; height: 88px;">
-                        <div class="titulo">
-                            <label style="font-size: 18px;">Controle de Chaves</label><br>
-                            <label style="font-size: 18px;">de {{ context.de | dataLimite }} até {{ context.ate | dataLimite }}</label>
-                        </div>
-                    </th>
-                    <th style="border-bottom: none; height: 88px;">
-                        <div class="hora">
-                            <label style="font-size: 18px;">{{ context.hora }}</label><br>
-                            <label style="font-size: 18px;">{{ context.ano }}</label>
-                        </div>
-                    </th>
-                </tr>
-            </table>
-        </div>
-    </header> -->
     <table class="table table-striped">
         <thead>
             <tr>
@@ -69,7 +44,7 @@
         </thead>
         <tbody>
             {% for movimento in context.movimentos %}
-                {% if loop.index0 < 18 %}
+                {% if loop.index0 < context.movimentos | length - 1 and context.movimentos | length > 1 %}
                     {% if movimento.chave.nome == context.movimentos[loop.index0 + 1].chave.nome %}
                         <tr>
                     {% else %}
@@ -81,6 +56,14 @@
                             <td>{{ movimento.dataDev | dataLimite }} {{ movimento.horaDev }}</td>
                             <td>{{ movimento.respDev.nome | nome }}</td>
                         </tr>
+                {% else %}
+                    <tr>
+                        <td>{{ movimento.chave.nome | nome }}</td>
+                        <td>{{ movimento.dataRet | dataLimite }} {{ movimento.horaRet }}</td>
+                        <td>{{ movimento.respRet.nome | nome }}</td>
+                        <td>{{ movimento.dataDev | dataLimite }} {{ movimento.horaDev }}</td>
+                        <td>{{ movimento.respDev.nome | nome }}</td>
+                    </tr>
                 {% endif %}
             {% endfor %}
         </tbody>
@@ -88,11 +71,11 @@
     <table class="table footer">
         <tr>
             <td colspan="2">Emitido por: {{ session.nome }}</td>
-            <td colspan="2">Conferido por:________________</td>
-            <td>
-                <div class="page-number"></div>
-            </td>
         </tr>
     </table>
+    <div id="btns">
+        <a class="btn btn-outline-danger btn-sm" href="javascript:window.close()">Fechar</a>
+        <a class="btn btn-outline-primary btn-sm" href="javascript:window.print()">Imprimir</a>
+    </div>
 </body>
 </html>

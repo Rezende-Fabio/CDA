@@ -1,9 +1,24 @@
-let contadorInputs = 2;
+let contadorInputs = 1;
 let contadorAcomp = 1;
 let qtdeAcomps = parseInt(document.getElementById("qtdeAcomps").value);
+let codigos = [];
+
+function incremantaCodigo(){
+    let codigo = document.getElementById('codigoTerc').value;
+
+    for (let i = 0; i < qtdeAcomps; i++){
+        let sequencia = codigo.slice(2);
+        let novaSequencia = parseInt(sequencia) + i+1;
+        novaSequencia = novaSequencia.toString().padStart(6, '0');
+        let novoCodigo = "TE" + novaSequencia;
+        codigos.push(novoCodigo);
+    }
+}
+
+incremantaCodigo();
 
 function adicionarInput() {
-    if ( contadorInputs <= qtdeAcomps+1){
+    if ( contadorInputs <= qtdeAcomps){
         const inputsContainer = document.getElementById('inputs-container');
 
         const novoInput = document.createElement('div');
@@ -13,9 +28,10 @@ function adicionarInput() {
         novoInput.innerHTML = `
             <div class="header-acomp">
                 <label for="">Acompanhante ${contadorAcomp}</label>
-                <a class="btn btn-sm btn-outline-danger" onclick="excluirInput(${contadorInputs})"><i class="fa-solid fa-trash-can"></i></a>
+                <a class="btn-excluir btn btn-sm btn-outline-danger" onclick="excluirInput(${contadorInputs})"><i class="fa-solid fa-trash-can"></i></a>
             </div>
             <div class="div-cpf col-4">
+                <input class="d-none" type="text" id="codigoTerc_${contadorInputs}" name="codigoTerc_${contadorInputs}" value="${codigos[contadorInputs-1]}">
                 <label for="" class="cpf">CPF:</label>
                 <span class="alerta-cpf none">*CPF inválido</span>
                 <input type="text" class="form-control upper" oninput="formatCPF()" maxlength="14" tabindex="11" name="cpf_${contadorInputs}" id="cpf_${contadorInputs}" required>
@@ -37,17 +53,11 @@ function adicionarInput() {
             input.addEventListener('input', function() {
                 formatarCPF(input);
             });
-            input.addEventListener('input', function() {
-                verificaCpfDiv(input);
-            });
             input.addEventListener('keyup', function() {
                 pesquisaCpf(input);
             });
-            input.addEventListener('keypress', function() {
-                verificaCpfDiv(input);
-            });
             input.addEventListener('blur', function() {
-                buscaCPF(input);
+                buscaNome(input);
                 verificaCpfDiv(input);
             });
         });
@@ -68,8 +78,29 @@ function adicionarInput() {
 function excluirInput(id) {
     const divASerExcluida = document.getElementById(`acomp_${id}`);
     divASerExcluida.remove();
+    renumerarElementos();
     contadorInputs--;
     contadorAcomp--;
+}
+
+function renumerarElementos() {
+    const todasDivs = document.querySelectorAll('[id^="acomp_"]');
+    todasDivs.forEach((div, index) => {
+        const idAtual = div.id.split('_')[1];
+        div.id = `acomp_${index+1}`;
+
+        div.querySelector('label').textContent = `Acompanhante ${index+1}`;
+        div.querySelector('input[name^="codigoTerc"]').id = `codigoTerc_${index+1}`;
+        div.querySelector('input[name^="codigoTerc"]').name = `codigoTerc_${index+1}`;
+        div.querySelector('input[name^="codigoTerc"]').value = codigos[index];
+        div.querySelector('input[name^="cpf"]').id = `cpf_${index+1}`;
+        div.querySelector('input[name^="cpf"]').name = `cpf_${index+1}`;
+        div.querySelector('input[name^="nome"]').id = `nome_${index+1}`;
+        div.querySelector('input[name^="nome"]').name = `nome_${index+1}`;
+
+        const btnExcluir = div.querySelector('.btn-excluir');
+        btnExcluir.setAttribute('onclick', `excluirInput(${index+1})`);
+    });
 }
 
 
@@ -92,9 +123,14 @@ function formatarCPF(input) {
 }
 
 
-function buscaCPF(InputCpf){
-    var cpf = InputCpf.value.replace(/\D/g, '');
-    var inputNome = document.getElementById(`nome_${InputCpf.name.charAt(InputCpf.name.length - 1)}`);
+function buscaNome(inputCpf){
+    var cpf = inputCpf.value.replace(/\D/g, '');
+    if (inputCpf.name === "cpfTerc"){
+        var inputNome = document.getElementById(`nomeTerc`);
+    }else {
+        var inputNome = document.getElementById(`nome_${inputCpf.name.charAt(inputCpf.name.length - 1)}`);
+    }
+    
     var respCpf = "";
 
     $.ajax({
@@ -132,46 +168,64 @@ function formatarPlaca(input) {
     input.value = placa.toUpperCase();
 }
 
+function adicionaAutoComplete(input){
+    let inputNome = document.getElementById('nomeTerc');
 
-function verificaCpf(cpf){
-    cpf = cpf.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
+    if (input.name.includes("cpf_")){
+        inputNome = document.getElementById(`nome_${input.name.charAt(input.name.length - 1)}`);
+        inputNome.addEventListener('keyup', function() {
+            pesquisaTerceiro(inputNome); 
+        });
+    }else{
+        inputNome.addEventListener('keyup', function() {
+            pesquisaTerceiro(inputNome); 
+        });
+    }
+}
+
+
+function verificaCpf(input){
+    cpf = input.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
 
     if (cpf.length !== 11) {
         return false;
-    }
+    }else if (cpf === "00000000000"){
+        return true
+    }else{
+        // Verifica se todos os dígitos são iguais (CPF inválido)
+        if (/^(\d)\1+$/.test(cpf)) {
+            return false;
+        }
 
-    // Verifica se todos os dígitos são iguais (CPF inválido)
-    if (/^(\d)\1+$/.test(cpf)) {
-        return false;
-    }
+        // Calcula o primeiro dígito verificador
+        let soma = 0;
+        for (let i = 0; i < 9; i++) {
+            soma += parseInt(cpf.charAt(i)) * (10 - i);
+        }
+        let resto = 11 - (soma % 11);
+        let digito1 = resto >= 10 ? 0 : resto;
 
-    // Calcula o primeiro dígito verificador
-    let soma = 0;
-    for (let i = 0; i < 9; i++) {
-        soma += parseInt(cpf.charAt(i)) * (10 - i);
-    }
-    let resto = 11 - (soma % 11);
-    let digito1 = resto >= 10 ? 0 : resto;
+        // Verifica o primeiro dígito verificador
+        if (digito1 !== parseInt(cpf.charAt(9))) {
+            return false;
+        }
 
-    // Verifica o primeiro dígito verificador
-    if (digito1 !== parseInt(cpf.charAt(9))) {
-        return false;
-    }
+        // Calcula o segundo dígito verificador
+        soma = 0;
+        for (let i = 0; i < 10; i++) {
+            soma += parseInt(cpf.charAt(i)) * (11 - i);
+        }
+        resto = 11 - (soma % 11);
+        let digito2 = resto >= 10 ? 0 : resto;
 
-    // Calcula o segundo dígito verificador
-    soma = 0;
-    for (let i = 0; i < 10; i++) {
-        soma += parseInt(cpf.charAt(i)) * (11 - i);
-    }
-    resto = 11 - (soma % 11);
-    let digito2 = resto >= 10 ? 0 : resto;
+        // Verifica o segundo dígito verificador
+        if (digito2 !== parseInt(cpf.charAt(10))) {
+            return false;
+        }
 
-    // Verifica o segundo dígito verificador
-    if (digito2 !== parseInt(cpf.charAt(10))) {
-        return false;
+        return true; // CPF válido
     }
-
-    return true; // CPF válido
+    
 }
 
 
@@ -243,6 +297,7 @@ function verificaCpfDiv(input){
 
     cpf = cpf.value.replace(/\D/g, ''); // Remove todos os caracteres não numéricos
 
+
     if (cpf.trim().length === 0){
         labelCpf.classList.remove("cpf-invalido-label");
         spanAlerta.classList.add("none");
@@ -252,6 +307,8 @@ function verificaCpfDiv(input){
         labelCpf.classList.add("cpf-invalido-label");
         spanAlerta.classList.remove("none");
         input.classList.add("cpf-invalido");
+    }else if (cpf === "00000000000"){
+        adicionaAutoComplete(input);
     }
 
     // Verifica se todos os dígitos são iguais (CPF inválido)

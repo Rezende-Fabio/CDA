@@ -6,153 +6,120 @@
 {% include "public/header.html" %}
 <section class="content">
     <div class="container-fluid">
-        <div class="row mb-4 justify-content-evenly">
-            <div class="col-auto">
-                <div class="card">
-                    <div class="icon">
-                        <i class="fa-solid fa-person-walking-arrow-loop-left size"></i>
-                    </div>
-                    <div class="text">
-                        <div class="titulo">
-                            Visitas do Dia
-                        </div>
-                        <div class="valor">
-                            005
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-auto">
-                <div class="card">
-                    <div class="icon">
-                        <i class="fa-solid fa-user size"></i>
-                    </div>
-                    <div class="text">
-                        <div class="titulo">
-                            Visitantes
-                        </div>
-                        <div class="valor">
-                            005
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="row mb-4">
             <div class="card-table">
                 <div class="titulo-card-table">
-                    Visitantes na Empresa
+                    Logs Controle Terceiros
                 </div>
                 <table class="table">
                     <thead class="table-header">
                         <tr>
-                            <th scope="col">Nome</th>
-                            <th scope="col">CPF</th>
-                            <th scope="col">Entrada</th>
-                            <th scope="col">Visitado</th>
-                            <th scope="col">Saída?</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@mdo</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
-                            <td>@twitter</td>
-                            <td>@mdo</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
-                            <td>@twitter</td>
-                            <td>@mdo</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="card-table">
-                <div class="titulo-card-table">
-                    Ultimas Entradas
-                </div>
-                <table class="table">
-                    <thead class="table-header">
-                        <tr>
-                            <th scope="col">Nome</th>
-                            <th scope="col">Entrada</th>
-                            <th scope="col">Saída?</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        <div class="row mb-4">
-            <div class="card-table">
-                <div class="titulo-card-table">
-                    Chaves não Devolvidas
-                </div>
-                <table class="table">
-                    <thead class="table-header">
-                        <tr>
-                            <th scope="col">Chave</th>
-                            <th scope="col">Retirada</th>
+                            <th scope="col">Ação</th>
+                            <th scope="col">Data</th>
                             <th scope="col">Responsavel</th>
-                            <th scope="col">Devolução?</th>
+                            <th scope="col">Visitante</th>
+                            <th scope="col">Motivo</th>
+                            <th scope="col"><span style='display:flex; text-align: center; justify-content: center;align-items: center;'>Visualizar</span></th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">1</th>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>Otto</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">2</th>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>Otto</td>
-                        </tr>
-                        <tr>
-                            <th scope="row">3</th>
-                            <td colspan="2">Larry the Bird</td>
-                            <td>Otto</td>
-                        </tr>
+                    <tbody id="log-contorle-terceiro">
                     </tbody>
                 </table>
             </div>
         </div>
-    </div>
+        <div class="row mb-4">
+            <div class="card-table">
+                <div class="titulo-card-table">
+                    Logs Controle Gerentes
+                </div>
+                <table class="table">
+                    <thead class="table-header">
+                        <tr>
+                            <th scope="col">Ação</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Responsavel</th>
+                            <th scope="col">Crachá</th>
+                            <th scope="col">Gerente</th>
+                            <th scope="col"><span style='display:flex; text-align: center; justify-content: center;align-items: center;'>Visualizar</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="log-contorle-gerente">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row mb-4">
+            <div class="card-table">
+                <div class="titulo-card-table">
+                    Logs Controle Chaves
+                </div>
+                <table class="table">
+                    <thead class="table-header">
+                        <tr>
+                            <th scope="col">Ação</th>
+                            <th scope="col">Data</th>
+                            <th scope="col">Responsavel</th>
+                            <th scope="col">Código</th>
+                            <th scope="col">Chave</th>
+                            <th scope="col"><span style='display:flex; text-align: center; justify-content: center;align-items: center;'>Visualizar</span></th>
+                        </tr>
+                    </thead>
+                    <tbody id="log-contorle-chave">
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </section>
+{% endblock %}
+{% block script %}
+<script src="{{ url_for('static', filename='js/dashboardTec/dataControlTercDash.js') }}"></script>
+<script>
+    var tabela = document.getElementById("log-contorle-terceiro");
+    tabela.innerHTML = "";
+    dadosLogsControleTerc.forEach(element => {
+        tabela.innerHTML += `<tr>
+                        <td>${element.acao}</td>
+                        <td>${element.data}</td>
+                        <td>${element.resp}</td>
+                        <td>${element.terc}</td>
+                        <td>${element.motivo}</td>
+                        <td>${element.visualizar}</td>
+                    </tr>`
+    });
+</script>
+
+<script src="{{ url_for('static', filename='js/dashboardTec/dataControlGerDash.js') }}"></script>
+<script>
+    var tabela = document.getElementById("log-contorle-gerente");
+
+    tabela.innerHTML = "";
+    dadosLogsControleGer.forEach(element => {
+        tabela.innerHTML += `<tr>
+                    <td>${element.acao}</td>
+                    <td>${element.data}</td>
+                    <td>${element.resp}</td>
+                    <td>${element.cracha}</td>
+                    <td>${element.gerente}</td>
+                    <td>${element.visualizar}</td>
+                </tr>`
+    });
+</script>
+
+<script src="{{ url_for('static', filename='js/dashboardTec/dataControlChavDash.js') }}"></script>
+<script>
+    var tabela = document.getElementById("log-contorle-chave");
+
+    tabela.innerHTML = "";
+    dadosLogsControleChave.forEach(element => {
+        tabela.innerHTML += `<tr>
+                        <td>${element.acao}</td>
+                        <td>${element.data}</td>
+                        <td>${element.resp}</td>
+                        <td>${element.codigo}</td>
+                        <td>${element.chave}</td>
+                        <td>${element.visualizar}</td>
+                    </tr>`
+    });
+</script>
 {% endblock %}

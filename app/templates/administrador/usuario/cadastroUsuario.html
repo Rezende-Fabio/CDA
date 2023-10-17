@@ -1,8 +1,8 @@
 {% extends "public/base.html" %}
-{% block content %}
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleUsuarios.css') }}">
 {% endblock %}
+{% block content %}
 {% include "public/header.html" %}
 <section class="content">
     <div class="container-fluid p-2">
@@ -15,7 +15,7 @@
             <div class="row mb-2">
                 <div class="col-4">
                     <label for="">Nome:</label>
-                    <input type="text" name="nome" id="nome" class="form-control upper" autocomplete="off" tabindex="1" value="{% if context.usuario %}{{ context.usuario.nome }}{% endif %}" required>
+                    <input type="text" name="nome" id="nome" class="form-control upper" maxlength="45" autocomplete="off" tabindex="1" value="{% if context.usuario %}{{ context.usuario.nome }}{% endif %}" required>
                 </div>
                 <div class="col-3">
                     <label for="">Usuário:</label>
@@ -62,7 +62,7 @@
         </form>
     </div>
 </section>
+{% endblock %}
 {% block script %}
 <script src="{{ url_for('static', filename='js/usuario/funcoes.js') }}"></script>
-{% endblock %}
 {% endblock %}

@@ -10,7 +10,7 @@
 
     <style>
         @page{
-            size: portrait !important;
+            size: landscape !important;
         }
     </style>
 </head>
@@ -21,7 +21,7 @@
                 <img class="" src="{{ url_for('static', filename='img/logo6.png') }}" id="icon" alt="User Icon" />
             </div>
             <div class="titulo">
-                <label>CONTROLE DE ENTRADA E SAÍDA DE GERENTES E ENCARREGADOS</label>
+                <label>RELATÓRIO DE ENTRADA E SAÍDA DE VEÍCULOS DE VISITANTES E TERCEIROS</label>
                 <label>de {{ context.de | dataLimite }} até {{ context.ate | dataLimite }}</label>
             </div>
             <div class="hora">
@@ -33,30 +33,30 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Gerente</th>
                 <th>Entrada</th>
                 <th>Saída</th>
+                <th>Placa</th>
+                <th>Veículo</th>
+                <th>Visitante</th>
+                <th>CPF</th>
+                <th>Empresa</th>
+                <th>Motivo</th>
+                <th>Pessoa Vistada</th>
             </tr>
         </thead>
         <tbody>
-            {% for movimento in context.movimentos %}
-                {% if loop.index0 < context.movimentos | length - 1 and context.movimentos | length > 1 %}
-                    {% if movimento.gerente.nome == context.movimentos[loop.index0 + 1].gerente.nome %}
-                        <tr>
-                    {% else %}
-                        <tr style="border-bottom: 1.5px solid #000000;">
-                    {% endif %}
-                            <td>{{ movimento.gerente.nome}}</td>
-                            <td>{{ movimento.dataEnt | dataLimite }} {{ movimento.horaEnt }}</td>
-                            <td>{{ movimento.dataSai | dataLimite }} {{ movimento.horaSai }}</td>
-                        </tr>
-                {% else %}
-                    <tr>
-                        <td>{{ movimento.gerente.nome}}</td>
-                        <td>{{ movimento.dataEnt | dataLimite }} {{ movimento.horaEnt }}</td>
-                        <td>{{ movimento.dataSai | dataLimite }} {{ movimento.horaSai }}</td>
-                    </tr>
-                {% endif %}
+            {% for movimento in context.movimentos %} 
+                <tr>
+                    <td>{{ movimento.dataEnt | dataLimite }} {{ movimento.horaEnt }}</td>
+                    <td>{{ movimento.dataSai | dataLimite }} {{ movimento.horaSai }}</td>
+                    <td>{% if movimento.placa | stripELength == 0 %}  ---"--- {% else %} {{ movimento.placa }} {% endif %}</td>
+                    <td>{% if movimento.veiculo | stripELength == 0 %}  ---"--- {% else %} {{ movimento.veiculo }} {% endif %}</td>
+                    <td>{{ movimento.terceiro.nome }}</td>
+                    <td>{% if movimento.terceiro.cpf == '00000000000' %} ESTRANGEIRO {% else %} {{ movimento.terceiro.cpf | cpf }} {% endif %}</td>
+                    <td>{% if movimento.empresa | stripELength == 0 %} ---"--- {% else %} {{ movimento.empresa }} {% endif %}</td>
+                    <td>{{ movimento.motivo }}</td>
+                    <td>{{ movimento.pessoaVisit.nome | nome }}</td>
+                </tr>
             {% endfor %}
         </tbody>
     </table>

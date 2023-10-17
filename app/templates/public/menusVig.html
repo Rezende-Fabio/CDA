@@ -63,7 +63,7 @@
                 </ul>
             </li>
             <li class="nav-item">
-                <a href="{{url_for('relatorioBlue.relatorio')}}" class="nav-link {% if context.active == 'relat' %}active{% endif %}">
+                <a data-bs-toggle="modal" data-bs-target="#modalLogin" data-bs-acao="RELATORIO" data-bs-toggle="modal" data-bs-id="" data-bs-url="{{url_for('relatorioBlue.relatorio')}}" class="nav-link {% if context.active == 'relat' %}active{% endif %} clicavel">
                     <i class="fa-solid fa-newspaper icon-space"></i>
                     <p class="font-p">
                         Relatórios

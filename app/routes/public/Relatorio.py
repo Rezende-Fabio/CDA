@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, abort, url_for, make_response
+from flask import Blueprint, render_template, request, abort, session, redirect, url_for
 from ...controllers.ControleGerarRelatorio import ControleGerarRelatorio
 from ...extensions.HtmlToPdf import PdfKit
 from ...extensions.LogErro import LogErro
@@ -18,8 +18,11 @@ relatorioBlue = Blueprint("relatorioBlue", __name__)
 @login_required
 def relatorio():
     try:
-        context = {"titulo": "Relatórios", "active": "relat"}
-        return render_template("public/relatorio.html", context=context)
+        if session["loginVig"] or session["grupo"] in ["ADM", "TEC"]:
+            context = {"titulo": "Relatórios", "active": "relat"}
+            return render_template("public/relatorio.html", context=context)
+        else:
+            return redirect(url_for('dashVigBlue.dashboard'))
     except:
         log = LogErro()
         tipoExcecao, valorExcecao, tb = sys.exc_info()
@@ -88,7 +91,7 @@ def relatorioControleTerceiros():
         ano = dataAtual.strftime("%d/%m/%Y")
         hora = dataAtual.strftime("%H:%M")
         context = {"de": request.form["deControlTerc"], "ate": request.form["ateControlTerc"], "ano": ano, "hora": hora, "movimentos": movimentos}
-        return render_template("public/relatorios/relatControleGerente.html", context=context)
+        return render_template("public/relatorios/relatControleTerceiro.html", context=context)
     except:
         log = LogErro()
         tipoExcecao, valorExcecao, tb = sys.exc_info()

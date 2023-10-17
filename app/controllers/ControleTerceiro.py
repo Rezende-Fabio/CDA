@@ -7,7 +7,6 @@ from ..models.entity.MovimentoTerceiro import MovimentoTerceiro
 from ..models.dao.ManterTerceiroDao import ManterTerceiroDao
 from ..models.dao.ConsultaIdsDao import ConsultaIdsDao
 from ..models.entity.Funcionario import Funcionario
-from ..models.dao.PesquisaDao import PesquisaDao
 from ..models.dao.TerceiroDao import TerceiroDao
 from dateutil.relativedelta import relativedelta
 from ..models.dao.GeraLogDao import GeraLogDao
@@ -24,7 +23,7 @@ class ControleTerceiro:
     @since - 27/07/2023
     """
 
-    def inserirEntrada(self, cpf: str, nome: str, empesa: str, placa: str, veiculo: str, motivo: str, pessoaVisit: str, dtEnt: str, hrEnt: str, acomps: list[dict]) -> bool:
+    def inserirEntrada(self, cpf: str, nome: str, empesa: str, placa: str, veiculo: str, motivo: str, pessoaVisit: str, dtEnt: str, hrEnt: str, acomps: list[dict], codigo: str) -> bool:
         """
         Insere um movimento de entrada para um terceiro (visitante) no sistema.
         
@@ -38,6 +37,7 @@ class ControleTerceiro:
         :param dtEnt: Data de entrada no formato 'YYYY-MM-DD'.
         :param hrEnt: Hora de entrada no formato 'hh:mm'.
         :param acomps: Lista de dicionários contendo informações sobre acompanhantes (caso haja).
+        :param codigo: Código do terceiro, usado quando o terceiro é estrangeiro.
         """
 
         funcionario = Funcionario()
@@ -48,10 +48,13 @@ class ControleTerceiro:
                                                    veiculo=veiculo.upper().strip(), motivo=motivo.upper().strip(), dataEnt=dtEnt.replace("-", ""),
                                                    horaEnt=hrEnt, delete=False) 
         
-        pesquisaDao = PesquisaDao()
         manterTerceiroDao = ManterTerceiroDao()
         controleManterTerceiro = ControleManterTerceiro()
-        terceiro = pesquisaDao.pesquisaCpfTercFormMov(''.join(filter(str.isdigit, cpf)))
+        #Verifica se o terceiro é estrangeiro, caso seja a ligação com o movimento será usando o código
+        if "00000000000" == ''.join(filter(str.isdigit, cpf)):
+            terceiro = manterTerceiroDao.consultarTerceiroDetalhadoNome(nome.upper().strip())
+        else:
+            terceiro = manterTerceiroDao.consultarTerceiroDetalhadoCpf(''.join(filter(str.isdigit, cpf)))
 
         #Verifica se o terceiro exsite no banco
         if terceiro:
@@ -59,23 +62,38 @@ class ControleTerceiro:
             self.movimentoTercNovo.terceiro = terceiroMov
         else:
             #Inclui o terceiro no banco
-            codigo = controleManterTerceiro.incrementaCodigoTerc()
-            controleManterTerceiro.incluirTerceiro(codigo, nome.upper().strip(), cpf)
-            terceiroMov = manterTerceiroDao.consultarTerceiroDetalhadoCpf(''.join(filter(str.isdigit, cpf)))
+            codigoTerc = controleManterTerceiro.incrementaCodigoTerc()
+            controleManterTerceiro.incluirTerceiro(codigoTerc, nome.upper().strip(), cpf)
+            
+            if "00000000000" == ''.join(filter(str.isdigit, cpf)):
+                terceiroMov = manterTerceiroDao.consultarTerceiroDetalhadoCodigo(codigoTerc)
+            else:
+                terceiroMov = manterTerceiroDao.consultarTerceiroDetalhadoCpf(''.join(filter(str.isdigit, cpf)))
+
             self.movimentoTercNovo.terceiro = terceiroMov
 
         listaAcomps = []
         for acomp in acomps:
-            acompanhante = pesquisaDao.pesquisaCpfTercFormMov(''.join(filter(str.isdigit, acomp["cpf"])))
+            if "00000000000" == ''.join(filter(str.isdigit, acomp["cpf"])):
+                terceiro = manterTerceiroDao.consultarTerceiroDetalhadoNome(acomp["nome"].upper().strip())
+            else:
+                acompanhante = manterTerceiroDao.consultarTerceiroDetalhadoCpf(''.join(filter(str.isdigit, acomp["cpf"])))
+                
             #Verifica se o terceiro exsite no banco
             if acompanhante:
-                acompMov = manterTerceiroDao.consultarTerceiroDetalhadoCpf(''.join(filter(str.isdigit, acomp["cpf"])))
+                if "00000000000" == ''.join(filter(str.isdigit, acomp["cpf"])):
+                    acompMov = manterTerceiroDao.consultarTerceiroDetalhadoCodigo(acomp["codigo"])
+                else:
+                    acompMov = manterTerceiroDao.consultarTerceiroDetalhadoCpf(''.join(filter(str.isdigit, acomp["cpf"])))
                 listaAcomps.append(acompMov)
             else:
                 #Inclui o terceiro no banco
                 codigo = controleManterTerceiro.incrementaCodigoTerc()
                 controleManterTerceiro.incluirTerceiro(codigo, acomp["nome"].upper().strip(), acomp["cpf"])
-                acompMov = manterTerceiroDao.consultarTerceiroDetalhadoCpf(''.join(filter(str.isdigit, acomp["cpf"])))
+                if "00000000000" == ''.join(filter(str.isdigit, acomp["cpf"])):
+                    acompMov = manterTerceiroDao.consultarTerceiroDetalhadoCodigo(codigo)
+                else:
+                    acompMov = manterTerceiroDao.consultarTerceiroDetalhadoCpf(''.join(filter(str.isdigit, acomp["cpf"])))
                 listaAcomps.append(acompMov)
 
         self.movimentoTercNovo.acomps = listaAcomps
@@ -101,7 +119,7 @@ class ControleTerceiro:
         self.geraLogControleTerceiro("ENTRADA", "")
 
         return True
-    
+
 
     def consultaMovTercDetalhado(self, id: int) -> MovimentoTerceiro:
         """
@@ -136,7 +154,7 @@ class ControleTerceiro:
         return movimento
 
 
-    def inserirSaida(self, id: int, dataSaid: str, horaSaid: str, cpf: str, acomps: list, cracha: str) -> bool:
+    def inserirSaida(self, id: int, dataSaid: str, horaSaid: str, cpf: str, acomps: list, cracha: str, codigo: str) -> bool:
         """
         Insere um registro de saída para um movimento de terceiro específico.
 
@@ -146,6 +164,7 @@ class ControleTerceiro:
         :param cpf: CPF do terceiro visitante.
         :param acomps: Lista de dicionários contendo informações sobre acompanhantes (caso haja).
         :param cracha: Número do crachá do funcionário visitado.
+        :param codigo: Código do terceiro, usado quando o terceiro é estrangeiro.
         """
         
         controleTerceiroDao = ControleTerceiroDao()
@@ -153,8 +172,13 @@ class ControleTerceiro:
         manterTerceiroDao = ManterTerceiroDao()
         manterFuncionario = ManterFuncionarioDao()
 
+        if "00000000000" == ''.join(filter(str.isdigit, cpf)):
+            terceiro = manterTerceiroDao.consultarTerceiroDetalhadoCodigo(codigo)
+        else:
+            terceiro = manterTerceiroDao.consultarTerceiroDetalhadoCpf(''.join(filter(str.isdigit, cpf)))
+
         self.movimentoTercNovo = controleTerceiroDao.consultaMovTercDetalhado(id)
-        self.movimentoTercNovo.terceiro = manterTerceiroDao.consultarTerceiroDetalhadoCpf(''.join(filter(str.isdigit, cpf)))
+        self.movimentoTercNovo.terceiro = terceiro
         self.movimentoTercNovo.pessoaVisit = manterFuncionario.consultarFuncionarioDetalhadoCracha(cracha)
         self.movimentoTercNovo.dataSai = dataSaid.replace("-", "")
         self.movimentoTercNovo.horaSai = horaSaid
@@ -162,7 +186,10 @@ class ControleTerceiro:
         listaAcomps = []
         if len(acomps) > 0:
             for acomp in acomps:
-                acompanhante = manterTerceiroDao.consultarTerceiroDetalhadoCpf(''.join(filter(str.isdigit, acomp["cpf"])))
+                if "00000000000" == ''.join(filter(str.isdigit, acomp["cpf"])):
+                    acompanhante = manterTerceiroDao.consultarTerceiroDetalhadoCodigo(acomp["codigo"])
+                else:
+                    acompanhante = manterTerceiroDao.consultarTerceiroDetalhadoCpf(''.join(filter(str.isdigit, acomp["cpf"])))
                 listaAcomps.append(acompanhante)
 
         self.movimentoTercNovo.acomps = listaAcomps

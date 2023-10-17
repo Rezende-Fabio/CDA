@@ -35,10 +35,13 @@ class ManterTerceiroDao:
 
         terceiro = CDA009.query.filter(CDA009.te_cpf==cpf, CDA009.te_delete!=True, CDA009.te_inativo!=True).first()
 
-        terceiroMov = Terceiro(id=terceiro.id_terceiro, codigo=terceiro.te_codigo, nome=terceiro.te_nome, cpf=terceiro.te_cpf,
+        if terceiro:
+            terceiroMov = Terceiro(id=terceiro.id_terceiro, codigo=terceiro.te_codigo, nome=terceiro.te_nome, cpf=terceiro.te_cpf,
                                ativo=terceiro.te_inativo, delete=terceiro.te_delete)
 
-        return terceiroMov
+            return terceiroMov
+        else: 
+            return None
     
 
     def consultarTerceiroDetalhadoId(self, id: int) -> Terceiro:
@@ -53,10 +56,10 @@ class ManterTerceiroDao:
         terceiro = CDA009.query.filter(CDA009.id_terceiro==id, CDA009.te_delete!=True).first()
 
         terceiroMov = Terceiro(id=terceiro.id_terceiro, codigo=terceiro.te_codigo, nome=terceiro.te_nome, cpf=terceiro.te_cpf,
-                               ativo=terceiro.te_inativo, delete=terceiro.te_delete)
+                            ativo=terceiro.te_inativo, delete=terceiro.te_delete)
 
         return terceiroMov
-    
+     
 
     def consultarTerceiroDetalhadoCodigo(self, codigo: str) -> Terceiro:
         """
@@ -68,11 +71,14 @@ class ManterTerceiroDao:
         """
 
         terceiro = CDA009.query.filter(CDA009.te_codigo==codigo, CDA009.te_delete!=True, CDA009.te_inativo!=True).first()
-
-        terceiroMov = Terceiro(id=terceiro.id_terceiro, codigo=terceiro.te_codigo, nome=terceiro.te_nome, cpf=terceiro.te_cpf,
+        
+        if terceiro:
+            terceiroMov = Terceiro(id=terceiro.id_terceiro, codigo=terceiro.te_codigo, nome=terceiro.te_nome, cpf=terceiro.te_cpf,
                                ativo=terceiro.te_inativo, delete=terceiro.te_delete)
 
-        return terceiroMov
+            return terceiroMov
+        else: 
+            return None
     
 
     def incluirTerceiro(self, tereceiro: Terceiro) -> bool:
@@ -173,3 +179,23 @@ class ManterTerceiroDao:
                 .filter(CDA009.te_delete!=True, CDA016.id_movTerc==idMov).first()
 
         return terceiro
+    
+
+    def consultarTerceiroDetalhadoNome(self, nome: str) -> Terceiro:
+        """
+        Consulta um terceiro no banco de dados pelo nome.
+
+        :param nome: O nome do terceiro a ser consultado.
+        
+        :return: Um objeto da classe Terceiro com os detalhes do terceiro encontrado.
+        """
+
+        terceiro = CDA009.query.filter(CDA009.te_nome==nome, CDA009.te_delete!=True, CDA009.te_inativo!=True,  CDA009.te_cpf=="00000000000").first()
+        
+        if terceiro:
+            terceiroMov = Terceiro(id=terceiro.id_terceiro, codigo=terceiro.te_codigo, nome=terceiro.te_nome, cpf=terceiro.te_cpf,
+                               ativo=terceiro.te_inativo, delete=terceiro.te_delete)
+
+            return terceiroMov
+        else: 
+            return None

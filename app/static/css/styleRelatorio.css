@@ -1,11 +1,4 @@
-@page {
-    size: A4 landscape;
-    @bottom-right {
-        content: "Página " counter(page) " de " counter(pages);
-    }
-}
-
-.hearder{
+.hearder {
     background-color: #afafaf;
     width: 100%;
     display: flex;
@@ -14,7 +7,7 @@
     height: 5rem;
 }
 
-.titulo{
+.titulo {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -22,7 +15,7 @@
     font-weight: bold;
 }
 
-.hora{
+.hora {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -30,25 +23,36 @@
     font-weight: 600;
 }
 
-#icon{
+#icon {
     width: 5.5rem;
     padding: 15px;
     filter: grayscale(100%);
 }
 
-.table{
+.table {
     font-size: 13.5px !important;
 }
 
-.footer{
+.footer {
     background-color: #afafaf;
     font-weight: bold;
     position: table-footer-group !important;
 }
 
+#btns {
+    justify-content: space-between;
+    margin: 1rem;
+    align-items: center;
+    display: flex;
+}
+
 
 @media print {
-    .hearder{
+    @page {
+        margin: 2mm;
+    }
+
+    .hearder {
         background-color: #afafaf;
         width: 100%;
         display: flex;
@@ -56,36 +60,40 @@
         align-items: center;
         height: 5rem;
     }
-    
-    .titulo{
+
+    .titulo {
         display: flex;
         flex-direction: column;
         align-items: center;
         padding: 15px;
         font-weight: bold;
     }
-    
-    .hora{
+
+    .hora {
         display: flex;
         flex-direction: column;
         align-items: center;
         padding: 15px;
         font-weight: 600;
     }
-    
-    #icon{
+
+    #icon {
         width: 5.5rem;
         padding: 15px;
         filter: grayscale(100%);
     }
 
-    .table{
+    .table {
         font-size: 13.5px !important;
     }
 
-    .footer{
+    .footer {
         background-color: #afafaf;
         font-weight: bold;
         position: table-footer-group !important;
+    }
+
+    #btns {
+        display: none;
     }
 }

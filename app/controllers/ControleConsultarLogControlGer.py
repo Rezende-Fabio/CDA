@@ -5,6 +5,7 @@ from ..extensions.FiltrosJson import filtroDataHora
 from dateutil.relativedelta import relativedelta
 from ..models.entity.Log import Log
 from datetime import datetime
+from typing import Optional
 import json as js
 
 class ControleConsultarLogControlGer:
@@ -15,7 +16,7 @@ class ControleConsultarLogControlGer:
     @since - 18/09/2023
     """
 
-    def consultaLogControlGer(self, acao: str) -> list[dict]:
+    def consultaLogControlGer(self, acao: str, log: Optional[str]=None) -> list[dict]:
         """
         Consulta e retorna uma lista de logs de inserção de gerentes de acordo com a data na tabela de parâmetros('PAR_MANUT_CONTROL_GER').
 
@@ -23,12 +24,15 @@ class ControleConsultarLogControlGer:
             Cada dicionário possui as chaves "id", "dataHora", "acao", "resp" e "movGer".
         """
 
-        #Consulta a data na tabela de parametros para fazer a pesquisa apartir desta data
-        consultaParametro = ConsultaParametrosDao()
-        mesesAtras = consultaParametro.consultaParametros("PAR_MANUT_CONTROL_GER")
         dataDe = datetime.now()
-        dataDe = dataDe - relativedelta(months=mesesAtras)
-        dataDe = dataDe.strftime("%Y-%m-01")
+        if log == None: 
+            #Consulta a data na tabela de parametros para fazer a pesquisa apartir desta data
+            consultaParametro = ConsultaParametrosDao()
+            mesesAtras = consultaParametro.consultaParametros("PAR_MANUT_CONTROL_GER")
+            dataDe = dataDe - relativedelta(months=mesesAtras)
+            dataDe = dataDe.strftime("%Y-%m-01")
+        else:
+            dataDe = dataDe.strftime("%Y-%m-%d")
 
         consultaControleGerDao = ConsultaLogControlGerDao()
         respDao = consultaControleGerDao.consultaLogsControlGer(dataDe, acao)
@@ -45,7 +49,7 @@ class ControleConsultarLogControlGer:
 
             listaLogs.append(dictLog)
 
-        return listaLogs    
+        return listaLogs
         
         
     def consultaLogControlGerDetelhado(self, id: int) -> Log:

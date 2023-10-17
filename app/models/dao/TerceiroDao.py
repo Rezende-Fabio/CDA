@@ -27,3 +27,17 @@ class TerceiroDao:
             return listaIds
         else:
             return listaIds
+        
+
+    def terceiroMovimento(self, idMov: int) -> int:
+        """
+        Consulta o ID do terceiro associado a um determinado movimento.
+
+        :param idMov: O ID do movimento de terceiro para o qual se deseja obter o ID do terceiro.
+        
+        :return: O ID do terceiro associado ao movimento.
+        """
+
+        movimento = CDA016.query.filter(CDA016.id_movTerc==idMov).first()
+        
+        return int(movimento.id_terceiro)

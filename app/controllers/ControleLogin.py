@@ -134,6 +134,7 @@ class ControleLogin:
                     self.verficaTrocaSenha(usuario) 
                     login_user(userResp)
                     session["usuarioVIG"] = usuario.usuario
+                    session["nome"] = usuario.nome
                     if usuario.grupo == "ADM":
                         return 1
                     elif usuario.grupo == "TEC":

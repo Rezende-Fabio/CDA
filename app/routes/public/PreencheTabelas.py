@@ -197,7 +197,10 @@ def listaLogsTerceiroAPI():
 def listaLogsControlChavesAPI():
     data = request.get_json()
     controleConsultarLogControlChav = ControleConsultarLogControlChav()
-    respControle = controleConsultarLogControlChav.consultaLogControlChave(data["acao"])
+    if "log" in data:
+        respControle = controleConsultarLogControlChav.consultaLogControlChave(data["acao"], data["log"])
+    else:
+        respControle = controleConsultarLogControlChav.consultaLogControlChave(data["acao"])
     
     resp = Response(response=json.dumps({"login": session["grupo"], "data": respControle}), status=200, mimetype="application/json")
     return resp
@@ -209,7 +212,10 @@ def listaLogsControlChavesAPI():
 def listaLogsControlTerceirosAPI():
     data = request.get_json()
     controleConsultarLogControlTerc = ControleConsultarLogControlTerc()
-    respControle = controleConsultarLogControlTerc.consultaLogControlTercEnt(data["acao"])
+    if "log" in data:
+        respControle = controleConsultarLogControlTerc.consultaLogControlTercEnt(data["acao"], data["log"])
+    else:
+        respControle = controleConsultarLogControlTerc.consultaLogControlTercEnt(data["acao"])
     
     resp = Response(response=json.dumps({"login": session["grupo"], "data": respControle}), status=200, mimetype="application/json")
     return resp
@@ -221,7 +227,10 @@ def listaLogsControlTerceirosAPI():
 def listaLogsControlGerentesAPI():
     data = request.get_json()
     controleConsultarLogControlGer = ControleConsultarLogControlGer()
-    respControle = controleConsultarLogControlGer.consultaLogControlGer(data["acao"])
+    if "log" in data:
+        respControle = controleConsultarLogControlGer.consultaLogControlGer(data["acao"], data["log"])
+    else:
+        respControle = controleConsultarLogControlGer.consultaLogControlGer(data["acao"])
     
     resp = Response(response=json.dumps({"login": session["grupo"], "data": respControle}), status=200, mimetype="application/json")
     return resp

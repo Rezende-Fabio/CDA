@@ -194,11 +194,11 @@ class ControleManterTerceiro:
         if respDao:
             parteInt = int(respDao[0][2:])
             parteInt += 1
-            codigo = f"{respDao[0][:2]}{str(parteInt).zfill(4)}"
+            codigo = f"{respDao[0][:2]}{str(parteInt).zfill(6)}"
 
             return codigo
         else:
-            return "TE0001"
+            return "TE000001"
 
 
     def geraLogTerceiro(self, acao: str, observacao: str) -> None:

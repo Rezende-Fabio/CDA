@@ -62,8 +62,8 @@
             <div class="tab-pane fade" id="controlTerc" role="tabpanel" aria-labelledby="controlTerc">
                 <div class="tabela p-3 m-2">
                     <label for="">Parâmetros para o Controle de Terceiros</label>
-                    <div class="container">
-                        <form action="{{url_for('relatorioBlue.relatorioControleGerentes')}}" method="POST" target="_blank">
+                    <div class="container-fluid">
+                        <form action="{{url_for('relatorioBlue.relatorioControleTerceiros')}}" method="POST" target="_blank">
                             <div class="row mb-2">
                                 <div class="col-3">
                                     <label for="">De:</label>
@@ -94,7 +94,7 @@
             <div class="tab-pane fade" id="ControlGer" role="tabpanel" aria-labelledby="ControlGer">
                 <div class="tabela p-3 m-2">
                     <label for="">Parâmetros para o Controle de Gerentes</label>
-                    <div class="container">
+                    <div class="container-fluid">
                         <form action="{{url_for('relatorioBlue.relatorioControleGerentes')}}" method="POST" onsubmit="return verificaGerente()" target="_blank">
                             <div class="row mb-2">
                                 <div class="col-3">

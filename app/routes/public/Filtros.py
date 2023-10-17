@@ -70,7 +70,13 @@ def _jinja2_filter_nome(nome, fmt=None):
     return nome[:20]
 
 
-#Filtro para ver o tamnho das strings no template
+#Filtro para ver o tamanho das strings no template
 @filtrosBlue.app_template_filter('stripELength')
 def _jinja2_filter_strip_e_length(valor, fmt=None):
     return len(valor.strip())
+
+
+#Filtro para ver o tamanho das strings no template
+@filtrosBlue.app_template_filter('length')
+def _jinja2_filter_length(valor, fmt=None):
+    return len(valor)

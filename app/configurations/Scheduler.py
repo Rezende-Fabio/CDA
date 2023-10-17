@@ -1,15 +1,14 @@
-from apscheduler.schedulers.background import BackgroundScheduler
-from ..extensions.FuncoesScheduler import teste
+from flask_apscheduler import APScheduler
+from ..extensions.Integracao import Integracao
 
-class Scheduler:
+scheduler = APScheduler()
 
-    def __init__(self):
-        self.scheduler = BackgroundScheduler()
+def init_app(app):
+    scheduler.init_app(app)
+    scheduler.start()
 
-    def start(self):
-        self.scheduler.start()
-        self.testeScheduler()
-        
-    def testeScheduler(self):
-        self.scheduler.add_job(func=teste, trigger="interval", seconds=10)  # Executa a cada 30 minutos
+    @scheduler.task('cron', id='my_job', day_of_week='sun', hour=17, minute=0)
+    def my_job():
+        intergracao = Integracao()
+        intergracao.integraFunc()
     

@@ -118,3 +118,11 @@ def pesquisaGerenteInputRelat(pesquisa):
     controlePesquisa = ControlePesquisa()
     respControle = controlePesquisa.pesquisaGerenteRelat(pesquisa.upper().strip())
     return jsonify(respControle)
+
+
+#Rota para pesquisa de terceiros tulizando o nome para o autocomplete
+@pesquisaBlue.route('/terceiro-pesquisa-nome/<pesquisa>')
+def pesquisaTerceiroNome(pesquisa):
+    controlePesquisa = ControlePesquisa()
+    respControle = controlePesquisa.pesquisaTerceiroNome(pesquisa.upper().strip())
+    return jsonify(respControle)

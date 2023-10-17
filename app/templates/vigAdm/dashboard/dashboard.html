@@ -17,7 +17,7 @@
                         <div class="titulo">
                             Visitas do Dia
                         </div>
-                        <div class="valor">
+                        <div class="valor" id="visitas-do-dia">
                             005
                         </div>
                     </div>
@@ -32,29 +32,14 @@
                         <div class="titulo">
                             Chaves em uso
                         </div>
-                        <div class="valor">
-                            005
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-auto">
-                <div class="card">
-                    <div class="icon">
-                        <i class="fa-solid fa-user size"></i>
-                    </div>
-                    <div class="text">
-                        <div class="titulo">
-                            Visitantes
-                        </div>
-                        <div class="valor">
+                        <div class="valor" id="chaves-em-uso">
                             005
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="row mb-2 justify-content-evenly">
+        <!-- <div class="row mb-2 justify-content-evenly">
             <div class="col-auto">
                 <div class="card">
                     <div class="icon">
@@ -100,7 +85,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
         <!-- <div>
             <canvas id="myChart"></canvas>
         </div> -->
@@ -127,7 +112,7 @@
         <div class="row mb-4">
             <div class="card-table">
                 <div class="titulo-card-table">
-                    Ultimas Entradas
+                    Gerentes
                 </div>
                 <table class="table">
                     <thead class="table-header">
@@ -145,7 +130,7 @@
         <div class="row mb-4">
             <div class="card-table">
                 <div class="titulo-card-table">
-                    Chaves não Devolvidas
+                    Chaves
                 </div>
                 <table class="table">
                     <thead class="table-header">
@@ -218,6 +203,11 @@
     <script src="{{ url_for('static', filename='js/dashboardVigAdm/dataEntradaTercDash.js') }}"></script>
     <script>
         var tabela = document.getElementById("visitas");
+        var valorCard = document.getElementById("visitas-do-dia");
+        
+        valorCard.innerHTML = "";
+        valorCard.innerHTML = `${dadosTercEntrada.length.toString().padStart(3, '0')}`;
+
         tabela.innerHTML = "";
         dadosTercEntrada.forEach(element => {
         tabela.innerHTML += `<tr>
@@ -246,6 +236,11 @@
     <script src="{{ url_for('static', filename='js/dashboardVigAdm/dataRetiradaChavDash.js') }}"></script>
     <script>
         var tabela = document.getElementById("chaves");
+        var valorCard = document.getElementById("chaves-em-uso");
+        
+        valorCard.innerHTML = "";
+        valorCard.innerHTML = `${dadosChaveRet.length.toString().padStart(3, '0')}`;
+
         tabela.innerHTML = "";
         dadosChaveRet.forEach(element => {
             tabela.innerHTML += `<tr>

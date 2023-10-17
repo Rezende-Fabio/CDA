@@ -1,11 +1,13 @@
 from ..models.dao.ManterFuncionarioDao import ManterFuncionarioDao
 from ..models.dao.ControleTerceiroDao import ControleTerceiroDao
+from ..models.entity.MovimentoTerceiro import MovimentoTerceiro
 from ..models.dao.ControleGerenteDao import ControleGerenteDao
 from ..models.entity.MovimentoGerente import MovimentoGerente
 from ..models.dao.ManterTerceiroDao import ManterTerceiroDao
 from ..models.dao.ControleChaveDao import ControleChaveDao
 from ..models.entity.MovimentoChave import MovimentoChave
 from ..models.dao.ManterChaveDao import ManterChaveDao
+from ..models.dao.TerceiroDao import TerceiroDao
 
 class ControleGerarRelatorio:
     """
@@ -81,31 +83,36 @@ class ControleGerarRelatorio:
         return listaMovimentos
     
 
-    def gerarRelatControleTerceiros(self, dataDe: str, dataAte: str, terceiro: str) -> list[MovimentoGerente]:
+    def gerarRelatControleTerceiros(self, dataDe: str, dataAte: str, terceiro: str) -> list[MovimentoTerceiro]:
         """
-        Consulta movimentos de gerentes dentro do range de datas que foi passado.
+        Consulta movimentos de terceiros dentro do range de datas que foi passado.
 
         :param dataDe: A data início da consulta no formato YYYY-MM-DD.
         :param dataAte: A data final da consulta no formato YYYY-MM-DD.
-        :param gerente: (opcional) Um gerente específico para consultar os movimentos.
+        :param terceiro: (opcional) Um terceiro específico para consultar os movimentos.
 
-        :return: Uma lista com objetos MovimentoGerente contendo as informações da cada um.
+        :return: Uma lista com objetos MovimentoTerceiro contendo as informações da cada um.
         """
 
         controleTerceiroDao = ControleTerceiroDao()
         manterTerceiroDao = ManterTerceiroDao()
+        manterFuncionarioDao = ManterFuncionarioDao()
+        terceiroDao = TerceiroDao()
 
         if len(terceiro.strip()) != 0:
-            gerente = manterTerceiroDao.consultarTerceiroDetalhadoCpf(list(terceiro.split())[0])
-            movimentos = controleTerceiroDao.consultaMovimentosRelatIdTerc(dataDe.replace("-", ""), dataAte.replace("-", ""), gerente.id)
+            visitante = manterTerceiroDao.consultarTerceiroDetalhadoCodigo(list(terceiro.split())[0])
+            movimentos = controleTerceiroDao.consultaMovimentosRelatIdTerc(dataDe.replace("-", ""), dataAte.replace("-", ""), visitante.id)
         else:
             movimentos = controleTerceiroDao.consultaMovimentosRelatTerceiro(dataDe.replace("-", ""), dataAte.replace("-", ""))
 
         listaMovimentos = []
         for movimento in movimentos:
-            gerente = manterTerceiroDao.consultarTerceiroDetalhadoId(movimento.mge_idFunc)
-            movGerente = MovimentoGerente(dataEnt=movimento.mge_dataEntra, horaEnt=movimento.mge_horaEntra, gerente=gerente, 
-                                          dataSai=movimento.mge_dataSaid, horaSai=movimento.mge_horaSaid)
+            funcionario = manterFuncionarioDao.consultarFuncionarioDetalhado(movimento.mte_idFunc)
+            idTerc = terceiroDao.terceiroMovimento(movimento.id_movTerc)
+            terceiro = manterTerceiroDao.consultarTerceiroDetalhadoId(idTerc)
+            movGerente = MovimentoTerceiro(dataEnt=movimento.mte_dataEntra, horaEnt=movimento.mte_horaEntra, empresa=movimento.mte_empresa,
+                                           veiculo=movimento.mte_veiculo, placa=movimento.mte_placa, motivo=movimento.mte_motivo, 
+                                           dataSai=movimento.mte_dataSaid, horaSai=movimento.mte_horaSaid, pessoaVisit=funcionario, terceiro=terceiro)
             
             listaMovimentos.append(movGerente)
 

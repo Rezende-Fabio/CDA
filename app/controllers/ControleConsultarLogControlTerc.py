@@ -5,6 +5,7 @@ from ..extensions.FiltrosJson import filtroDataHora
 from dateutil.relativedelta import relativedelta
 from ..models.entity.Log import Log
 from datetime import datetime
+from typing import Optional
 import json as js
 
 class ControleConsultarLogControlTerc:
@@ -15,7 +16,7 @@ class ControleConsultarLogControlTerc:
     @since - 18/09/2023
     """
 
-    def consultaLogControlTercEnt(self, acao: str) -> list[dict]:
+    def consultaLogControlTercEnt(self, acao: str, log: Optional[str]=None) -> list[dict]:
         """
         Consulta e retorna uma lista de logs de inserção de tercerios de acordo com a data na tabela de parâmetros('PAR_MANUT_CONTROL_TERC').
 
@@ -23,12 +24,15 @@ class ControleConsultarLogControlTerc:
             Cada dicionário possui tercerios "id", "dataHora", "acao", "resp" e "movTerc".
         """
 
-        #Consulta a data na tabela de parametros para fazer a pesquisa apartir desta data
-        consultaParametro = ConsultaParametrosDao()
-        mesesAtras = consultaParametro.consultaParametros("PAR_MANUT_CONTROL_TERC")
         dataDe = datetime.now()
-        dataDe = dataDe - relativedelta(months=mesesAtras)
-        dataDe = dataDe.strftime("%Y-%m-01")
+        if log == None:
+            #Consulta a data na tabela de parametros para fazer a pesquisa apartir desta data
+            consultaParametro = ConsultaParametrosDao()
+            mesesAtras = consultaParametro.consultaParametros("PAR_MANUT_CONTROL_TERC")
+            dataDe = dataDe - relativedelta(months=mesesAtras)
+            dataDe = dataDe.strftime("%Y-%m-01")
+        else:
+            dataDe = dataDe.strftime("%Y-%m-%d")
 
         consultaControleTercDao = ConsultaLogControlTercDao()
         respDao = consultaControleTercDao.consultaLogsControlTerc(dataDe, acao)

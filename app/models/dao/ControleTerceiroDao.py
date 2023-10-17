@@ -208,7 +208,7 @@ class ControleTerceiroDao:
 
         movimentos = CDA004.query.filter(CDA004.mte_dataEntra>=dataDe, CDA004.mte_dataEntra<=dataAte, CDA004.mte_dataSaid!=None, CDA004.mte_dataSaid!=None, CDA016.id_terceiro==idTerc)\
             .join(CDA016, CDA016.id_terceiro==idTerc)\
-                .order_by(CDA004.mte_dataEntra)
+                .order_by(CDA004.mte_dataEntra, CDA004.mte_horaEntra)
 
         return movimentos
     
@@ -223,8 +223,8 @@ class ControleTerceiroDao:
         :return: Uma lista contendo as informações da cada movimento.
         """
 
-        movimentos = CDA004.query.filter(CDA004.mte_dataEntra>=dataDe, CDA004.mte_dataEntra<=dataAte, CDA004.mte_dataSaid!=None, CDA004.mte_dataSaid!=None)\
-            .order_by(CDA004.mte_dataEntra)
+        movimentos = CDA004.query.filter(CDA004.mte_dataEntra>=dataDe, CDA004.mte_dataEntra<=dataAte, CDA004.mte_dataSaid!=None, CDA004.mte_dataSaid!=None, CDA004.mte_delete!=True)\
+            .order_by(CDA004.mte_dataEntra, CDA004.mte_horaEntra)
 
         return movimentos
 

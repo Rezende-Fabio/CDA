@@ -17,13 +17,14 @@
         <form class="container-fluid" id="formMovTerc" onsubmit="return verificaCPFs()">
             <div class="row mb-2">
                 <div class="div-cpf col-3">
+                    <input class="d-none" type="text" id="codigoTerc" name="codigoTerc" value="{{ context.codigo }}">
                     <label for="" class="cpf">CPF:</label>
                     <span class="alerta-cpf none">*CPF inválido</span>
-                    <input type="text" name="cpf_1" id="cpf_1" class="form-control upper" oninput="formatarCPF(this)" onkeyup="pesquisaCpf(this)" onblur="buscaCPF(this)" onkeypress="verificaCpfDiv(this)" maxlength="14" autocomplete="off" tabindex="1" required>
+                    <input type="text" name="cpfTerc" id="cpfTerc" class="form-control upper" oninput="formatarCPF(this)" onkeyup="pesquisaCpf(this)" onblur="buscaNome(this)" maxlength="14" autocomplete="off" tabindex="1" required>
                 </div>
                 <div class="col-5">
                     <label for="">Nome:</label>
-                    <input type="text" name="nome_1" id="nome_1" class="form-control upper" autocomplete="off" tabindex="2" required>
+                    <input type="text" name="nomeTerc" id="nomeTerc" class="form-control upper" autocomplete="off" tabindex="2" required>
                 </div>
                 <div class="col-4">
                     <label for="">Empresa:</label>
@@ -81,10 +82,7 @@
 {% block script %}
 <script src="{{ url_for('static', filename='js/ControleTerceiro/funcoes.js') }}"></script>
 <script>
-    document.getElementById('cpf_1').addEventListener('input', function(event) {
-        verificaCpfDiv(this);
-    });
-    document.getElementById('cpf_1').addEventListener('blur', function(event) {
+    document.getElementById('cpfTerc').addEventListener('blur', function(event) {
         verificaCpfDiv(this);
     });
 </script>
@@ -135,6 +133,35 @@
     }
 </script>  
 <script>
+    function pesquisaTerceiro(input){
+        var nome = input.value
+        if (nome.length >= 2){
+            
+            var nomes = []
+            function carregaNomes(){
+                $.getJSON(`/terceiro-pesquisa-nome/${nome}`, function(data, status, xhr){
+                    for (var i = 0; i < data.length; i++){
+                        nomes.push(data[i].nome);
+                    }
+                });
+            }
+            carregaNomes();
+
+            $(input).autocomplete({
+                source: nomes,
+                focus: function(event, ui) {
+                    console.log(document.getElementById('cpfTerc'));
+                    console.log(ui);
+                    console.log(event);
+                    $(event.id).addClass('item-selecionado');
+                }
+            });
+
+            $(".ui-helper-hidden-accessible").css("display", "none")
+        }
+    }
+</script>  
+<script>
     let isSubmitting = false;
 
     document.getElementById('formMovTerc').addEventListener('submit', function(event) {
@@ -151,7 +178,7 @@
         const inputs = div.querySelectorAll('input[id^="cpf"]');
 
         inputs.forEach((input) => {
-            inputsData.push({"cpf": input.value, "nome": document.getElementById(`nome_${input.name.charAt(input.name.length - 1)}`).value});
+            inputsData.push({"cpf": input.value, "nome": document.getElementById(`nome_${input.name.charAt(input.name.length - 1)}`).value, "codigo": document.getElementById(`codigoTerc_${input.name.charAt(input.name.length - 1)}`).value});
         });
 
         {% if session.grupo == 'ADM' %}
@@ -171,8 +198,9 @@
                 dataType: 'json',
                 contentType: 'application/json;charset=UTF-8',
                 data:JSON.stringify({
-                    cpf: $("#cpf_1").val(), 
-                    nome: $("#nome_1").val(),
+                    cpf: $("#cpfTerc").val(), 
+                    codigoTerc: $("#codigoTerc").val(),
+                    nome: $("#nomeTerc").val(),
                     empresa: $("#empresa").val(),
                     placa: $("#placa").val(),
                     veiculo: $("#veiculo").val(),

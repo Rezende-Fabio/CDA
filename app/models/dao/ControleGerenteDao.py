@@ -189,7 +189,7 @@ class ControleGerenteDao:
         :return: Uma lista contendo as informações da cada movimento.
         """
 
-        movimentos = CDA003.query.filter(CDA003.mge_dataEntra>=dataDe, CDA003.mge_dataEntra<=dataAte, CDA003.mge_horaSaid!=None, CDA003.mge_dataSaid!=None, CDA003.mge_idFunc==idFunc)\
+        movimentos = CDA003.query.filter(CDA003.mge_dataEntra>=dataDe, CDA003.mge_dataEntra<=dataAte, CDA003.mge_horaSaid!=None, CDA003.mge_dataSaid!=None, CDA003.mge_idFunc==idFunc, CDA003.mge_delete!=True)\
             .join(CDA007, CDA007.id_funcionario==CDA003.mge_idFunc)\
                 .order_by(CDA003.mge_dataEntra, CDA007.fu_nome, CDA003.mge_horaEntra)
 
@@ -206,7 +206,7 @@ class ControleGerenteDao:
         :return: Uma lista contendo as informações da cada movimento.
         """
 
-        movimentos = CDA003.query.filter(CDA003.mge_dataEntra>=dataDe, CDA003.mge_dataEntra<=dataAte, CDA003.mge_horaSaid!=None, CDA003.mge_dataSaid!=None)\
+        movimentos = CDA003.query.filter(CDA003.mge_dataEntra>=dataDe, CDA003.mge_dataEntra<=dataAte, CDA003.mge_horaSaid!=None, CDA003.mge_dataSaid!=None, CDA003.mge_delete!=True)\
             .join(CDA007, CDA007.id_funcionario==CDA003.mge_idFunc)\
                 .order_by(CDA003.mge_dataEntra, CDA007.fu_nome, CDA003.mge_horaEntra)
 

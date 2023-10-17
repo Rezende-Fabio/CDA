@@ -10,7 +10,8 @@ class PdfKit:
         self.listaCss = []
         self.options = {
             'page-size': 'A4',
-            'orientation': 'Landscape',  # Altere para 'Portrait' se desejar retrato
+            'orientation': 'Landscape',  
+            "encoding": "UTF-8",
         }
 
 

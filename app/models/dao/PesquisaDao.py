@@ -96,7 +96,7 @@ class PesquisaDao:
         :return: Uma lista de terceiros que correspondem aos critérios de pesquisa.
         """
 
-        terceiros = CDA009.query.filter(CDA009.te_cpf.like(f"%{cpf}%"), CDA009.te_delete!=True, CDA009.te_inativo!=True)
+        terceiros = CDA009.query.filter(CDA009.te_cpf.like(f"%{cpf}%"), CDA009.te_delete!=True, CDA009.te_inativo!=True, CDA009.te_cpf!="00000000000")
 
         return terceiros
     
@@ -209,7 +209,7 @@ class PesquisaDao:
         :return: O terceiro encontrado, ou None se não houver terceiro registrado com o CPF.
         """
 
-        terceiro = CDA009.query.filter(CDA009.te_cpf==cpf, CDA009.te_delete!=True, CDA009.te_inativo!=True).first()
+        terceiro = CDA009.query.filter(CDA009.te_cpf==cpf, CDA009.te_delete!=True, CDA009.te_inativo!=True, CDA009.te_cpf!="00000000000").first()
 
         return terceiro
     
@@ -267,3 +267,18 @@ class PesquisaDao:
         movimento = CDA003.query.filter(CDA003.mge_idFunc==id, CDA003.mge_dataSaid==None, CDA003.mge_horaSaid==None, CDA003.mge_delete!=True).first()
 
         return movimento
+    
+
+    def pesquisaTerceiroNome(self, nome: str) -> CDA009:
+        """
+        Esta função consulta o banco de dados para verificar se há um terceiro registrado com o Nome fornecido.
+        Ela retorna os terceiros encontrados, se houver, ou None se não houver nenhum terceiro registrado com o Nome.
+
+        :param nome: O Nome do terceiro que se deseja pesquisar.
+
+        :return: Os terceiros encontrados, ou None se não houver terceiro registrado com o Nome.
+        """
+
+        terceiro = CDA009.query.filter(CDA009.te_nome.like(f"%{nome}%"), CDA009.te_delete!=True, CDA009.te_inativo!=True, CDA009.te_cpf=="00000000000")
+
+        return terceiro

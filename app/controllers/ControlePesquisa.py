@@ -211,13 +211,13 @@ class ControlePesquisa:
 
     def pesquisaTerceiroFormmov(self, pesquisa: str) -> dict:
         """
-        Essa função recebe uma string para pesquisa de funcionários no input, se o que foi 
-        digitado for Crachá retorna o(s) funcionário(s) correspondente(s) ao Crachá, se foi o 
-        nome retorna o(s) funcionário(s) correspondente(s) ao nome.
+        Essa função recebe uma string para pesquisa de terceiros no input, se o que foi 
+        digitado for Crachá retorna o(s) terceiro(s) correspondente(s) ao Crachá, se foi o 
+        nome retorna o(s) terceiro(s) correspondente(s) ao nome.
 
-        :parm pesquisa: Nome ou Crachá do funcionário que foi digitado no input.
+        :parm pesquisa: Nome ou Crachá do terceiro que foi digitado no input.
 
-        :return: Retorna uma lista com dicionário contendo os funcionário(s) correspondente(s) a pesquisa.
+        :return: Retorna uma lista com dicionário contendo os terceiro(s) correspondente(s) a pesquisa.
             Cada dicionário possui chave "nome".
         """
 
@@ -333,3 +333,25 @@ class ControlePesquisa:
                 dictGer = {"gerente": f"{gerente.fu_cracha} - {gerente.fu_nome}"}
                 listaGerente.append(dictGer)
             return listaGerente
+        
+    
+    def pesquisaTerceiroNome(self, pesquisa: str) -> list[dict]:
+        """
+        Essa função recebe uma string para pesquisa de terceiros e retorna o(s) teceiros(s) correspondente(s) ao nome.
+
+        :parm pesquisa: Nome do terceiro que foi digitado no input.
+
+        :return: Retorna uma lista com dicionário contendo os terceiro(s) correspondente(s) a pesquisa.
+            Cada dicionário possui chave "nome".
+        """
+
+        pesquisaDao = PesquisaDao()
+        respDao = pesquisaDao.pesquisaTerceiroNome(pesquisa)
+
+        listaTerc = []
+        for terc in respDao:
+            print(terc.te_nome)
+            dictTerc = {"nome": f"{terc.te_nome}"}
+            listaTerc.append(dictTerc)
+        
+        return listaTerc

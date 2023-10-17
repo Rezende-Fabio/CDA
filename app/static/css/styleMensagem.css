@@ -21,3 +21,13 @@
 .check-maquina{
     font-weight: 470 !important;
 }
+
+.btn-mostrar{
+    text-decoration: none;
+    margin-left: 1rem;
+    color: #000000;
+}
+
+.btn-mostrar i{
+    font-size: 20px;
+}

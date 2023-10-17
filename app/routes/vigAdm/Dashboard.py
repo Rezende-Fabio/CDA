@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort, request
+from flask import Blueprint, render_template, abort, request, session
 from ...extensions.LogErro import LogErro
 from flask_login import login_required
 import traceback
@@ -12,6 +12,7 @@ dashVigBlue = Blueprint("dashVigBlue", __name__)
 @login_required
 def dashboard():
     try:
+        session["loginVig"] = False
         context = {"titulo": "Dashboard", "active": "dashboard"}
         return render_template("vigAdm/dashboard/dashboard.html", context=context)
     except:

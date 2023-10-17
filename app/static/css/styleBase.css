@@ -1,13 +1,13 @@
-.teste{
+.teste {
     height: 100vh;
     bottom: 0;
 }
 
-.teste h3{
+.teste h3 {
     margin-bottom: 0;
 }
 
-.user-menu{
+.user-menu {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -17,12 +17,12 @@
     margin-right: 0.2rem;
 }
 
-.user-menu h6{
+.user-menu h6 {
     font-size: 15px;
     font-weight: 700;
 }
 
-#logout{
+#logout {
     background-color: #dc3545;
     padding: 8px 5px 8px 8px;
     color: #fff;
@@ -31,26 +31,26 @@
     margin-left: 0.5rem;
 }
 
-#logout:hover{
+#logout:hover {
     background-color: #fff;
     color: #dc3545;
     border: 1px solid #dc3545;
 }
 
-.icon-space{
+.icon-space {
     margin-right: 0.5rem;
     font-size: 20px;
 }
 
-.font-icon{
+.font-icon {
     font-size: 18px;
 }
 
-.font-p{
+.font-p {
     font-size: 20px;
 }
 
-.data-hora{
+.data-hora {
     width: 100%;
     display: flex;
     justify-content: center;
@@ -58,29 +58,29 @@
     flex-direction: column;
 }
 
-.upper{
+.upper {
     text-transform: uppercase;
 }
 
-.form-group{
+.form-group {
     display: flex;
     align-items: center;
     border-radius: 1rem;
     margin-bottom: 0.3rem;
 }
 
-.form-group input{
+.form-group input {
     padding-left: 30px !important;
 }
 
-.form-group i{
+.form-group i {
     position: absolute;
     z-index: 9999;
     padding-left: 8px;
     color: #000000ab
 }
 
-.ui-menu{
+.ui-menu {
     background-color: #ffffff;
     list-style: none;
     width: 2rem;
@@ -90,56 +90,54 @@
     z-index: 999999999999999;
 }
 
-.ui-menu li:hover{
+.ui-menu li:hover {
     background-color: #a1a1a1;
     padding: 2px 2px 2px 5px;
-    border-radius: 0 0 0.5rem 0.5rem;
 }
 
-.ui-menu li:focus{
+.ui-menu li:focus {
     background-color: #a1a1a1;
-    border-radius: 0 0 0.5rem 0;
 }
 
-.header-titulo{
+.header-titulo {
     font-weight: 600;
 }
 
-.icone-ativo{
+.icone-ativo {
     color: #33961f;
 }
 
-.icone-inativo{
+.icone-inativo {
     color: #dc3545;
 }
 
-.msg-alert{
+.msg-alert {
     font-weight: 500;
     font-size: 18px;
 }
 
-.btn-group{
+.btn-group {
     background-color: #f4f6f9;
 }
 
-.icon-size{
+.icon-size {
     font-size: 1.5rem;
     margin-right: 0.8rem;
 }
 
-#alert-modal-login{
+#alert-modal-login {
     flex-direction: row !important;
 }
 
-.alert{
+.alert {
     border-left: 8px solid !important;
 }
 
-.alert h6{
+.alert h6 {
     font-weight: 650 !important;
 }
 
-.base{
+.base {
     width: 100%;
     padding-top: 5px;
     padding-left: 15px;
@@ -150,20 +148,34 @@
     text-align: end;
 }
 
-.base label{
+.base label {
     color: #ffffff;
     font-size: 10.5px;
     transition: width 0.3s ease;
 }
 
-.botaoParm{
+.botaoParm {
     width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-textarea{
+textarea {
     max-height: 100px !important;
     min-height: 40px !important;
+}
+
+.clicavel {
+    cursor: pointer;
+}
+
+.ui-state-active,
+.ui-widget-content .ui-state-active,
+.ui-widget-header .ui-state-active,
+a.ui-button:active,
+.ui-button:active,
+.ui-button.ui-state-active:hover {
+    background-color: #a1a1a1;
+    padding: 2px 2px 2px 5px;
 }

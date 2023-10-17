@@ -12,13 +12,14 @@
                         <div class="col mb-1 d-none">
                             <input type="text" name="idMov" id="idMov" class="form-control upper" value="{{ context.movimento.id }}" readonly>
                         </div>
-                        <div class="col-8 mb-1">
-                            <label for="recipient-name" class="col-form-label">Nome:</label>
-                            <input type="text" name="nomeTerc" id="nomeTerc" class="form-control upper" value="{{ context.movimento.terceiro.nome }}" readonly>
-                        </div>
-                        <div class="col mb-1">
+                        <div class="col-3 mb-1">
+                            <input class="d-none" type="text" id="codigoTerc" name="codigoTerc" value="{{ context.movimento.terceiro.codigo }}">
                             <label for="recipient-name" class="col-form-label">CPF:</label>
                             <input type="text" name="tercCpf" id="tercCpf" class="form-control upper" value="{{ context.movimento.terceiro.cpf | cpf }}" readonly>
+                        </div>
+                        <div class="col mb-1">
+                            <label for="recipient-name" class="col-form-label">Nome:</label>
+                            <input type="text" name="nomeTerc" id="nomeTerc" class="form-control upper" value="{{ context.movimento.terceiro.nome }}" readonly>
                         </div>
                     </div>
                     <div class="row">
@@ -78,13 +79,14 @@
                         <div class="row" id="inputResp" style="display: none;">
                             {% for acompanhante in context.movimento.acomps %}
                                 <div class="row">
+                                    <div class="acomps col-3">
+                                        <input class="d-none" type="text" id="codigoAcomp" name="codigoAcomp" value="{{ acompanhante.codigo }}">
+                                        <label for="respDev" class="col-form-label">CPF:</label>
+                                        <input type="text" name="cpfAcomp" id="cpfAcomp" class="form-control upper" value="{{ acompanhante.cpf | cpf }}" readonly>
+                                    </div>
                                     <div class="col">
                                         <label for="respDev" class="col-form-label">Nome:</label>
                                         <input type="text" name="respDev" id="respDev" class="form-control upper" value="{{ acompanhante.nome }}" readonly>
-                                    </div>
-                                    <div class="col">
-                                        <label for="respDev" class="col-form-label">CPF:</label>
-                                        <input type="text" name="cpfAcomp" id="cpfAcomp" class="form-control upper" value="{{ acompanhante.cpf | cpf }}" readonly>
                                     </div>
                                 </div>
                             {% endfor %}
@@ -156,14 +158,16 @@
     $(document).ready(function(){
         $("#btnEnviarDev").click(function(){
             let inputsData = [];
-            let inputs = document.querySelectorAll('input[id^="cpf"]');
+            let divs = document.querySelectorAll('.acomps');
             let dataEnt = new Date($("#dataEnt").val());
             let dataSai = new Date($("#dataSaid").val());
             let horaEnt = $("#horaEnt").val();
             let horaSai = $("#horaSaid").val();
 
-            inputs.forEach((input) => {
-                inputsData.push({"cpf": input.value});
+            divs.forEach((div) => {
+                let cpf = div.querySelector('input[id="cpfAcomp"]');
+                let codigo = div.querySelector('input[id="codigoAcomp"]');
+                inputsData.push({"cpf": cpf.value, "codigo": codigo.value});
             });
 
             if (dataEnt.getTime() > dataSai.getTime()){
@@ -199,6 +203,7 @@
                         dataSaid: $("#dataSaid").val(),
                         horaSaid: $("#horaSaid").val(),
                         cpf: $("#tercCpf").val(),
+                        codigo: $("#codigoTerc").val(),
                         cracha: $("#cracha").val(),
                         acomps: inputsData,
                     }),
@@ -206,16 +211,7 @@
                         window.location=dest
                     },
                     error: function(data, status){
-                        var h6 = data.responseJSON.msg;
-                        $("#alert").prop("style").removeProperty("opacity");
-                        $("#alert").empty();
-                        $("#alert").removeClass();
-                        $("#alert").append(h6);
-                        $("#alert").addClass("alert alert-danger alert-dismissible fade show");
-                        $("#alert").show();
-                        window.setTimeout(function() {
-                            $("#alert").fadeTo(500, 0).slideUp(500, function(){});
-                        }, 15000);
+                        window.location="/error_500"
                     },
                 });
             }

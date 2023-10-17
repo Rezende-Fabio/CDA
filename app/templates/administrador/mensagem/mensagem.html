@@ -4,49 +4,40 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleMensagem.css') }}">
 {% endblock %}
 {% include "public/header.html" %}
-<section class="content">
+<section class="content" style="overflow-x: hidden;">
     <div class="container-fluid p-2">
-         
-        <div id="alert" class="alert alert-danger alert-dismissible d-flex align-items-center none" role="alert">
-            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>
-            <div id="msg">
-                <h6></h6>
+        <div class="row mb-2">
+            <div class="col">
+                <label for="">Mensagem:</label>
+                <textarea class="form-control upper" maxlength="253" autofocus style="height: 100px" name="mensagem" id="mensagem" cols="15" rows="10"></textarea>
             </div>
         </div>
-        <form id="formMensagem">
-            <div class="row mb-2">
-                <div class="col">
-                    <label for="">Mensagem:</label>
-                    <textarea class="form-control upper" maxlength="253" autofocus style="height: 100px" name="mensagem" id="mensagem" cols="15" rows="10"></textarea>
+        <div class="form-check form-check-inline mb-2">
+            <label for="todos">Todos </label>
+            <input class="form-check-input" type="checkbox" id="todos" onchange="marcaTodosCheck()">
+        </div>
+        <div class="row mb-2" id="maquinas">
+            {% for grupo in context.grupos.grupos %}
+                <div class="d-flex ms-3 ps-3">
+                    <label for="master_{{ grupo.nome }}">{{ grupo.nome }}</label> <a class="btn-mostrar" onclick="mostrarMaquinas({{ grupo.nome }}, this)"><i class="fa-solid fa-caret-right"></i></a>
+                    <input class="form-check-input" type="checkbox" id="master_{{ grupo.nome }}" onchange="marcaCheck({{ grupo.nome }}, '{{ grupo.nome }}')">
                 </div>
-            </div>
-            <div class="form-check form-check-inline mb-2">
-                <label for="todos">Todos </label>
-                <input class="form-check-input" type="checkbox" id="todos" onchange="marcaTodosCheck()">
-            </div>
-            <div class="row mb-2" id="maquinas">
-                {% for grupo in context.grupos.grupos %}
-                    <div class="d-flex ms-3 ps-3">
-                        <label for="master_{{ grupo.nome }}">{{ grupo.nome }}</label>
-                        <input class="form-check-input" type="checkbox" id="master_{{ grupo.nome }}" onchange="marcaCheck({{ grupo.nome }}, '{{ grupo.nome }}')">
-                    </div>
-                    <div class="col mb-4 ms-3" id="{{ grupo.nome }}">
-                        <div class="checkbox-group">
-                            {% for maquina in grupo.maquinas  %}
-                            <div class="checkbox-item">
-                                <label class="check-maquina">
-                                    <input class="form-check-input" type="checkbox" id="maq_{{ maquina }}" value="{{ maquina }}">{{ maquina }}
-                                </label>
-                            </div>
-                            {% endfor %}
+                <div class="col mb-4 ms-3" id="{{ grupo.nome }}" style="display: none;">
+                    <div class="checkbox-group">
+                        {% for maquina in grupo.maquinas  %}
+                        <div class="checkbox-item">
+                            <label class="check-maquina">
+                                <input class="form-check-input" type="checkbox" id="maq_{{ maquina }}" value="{{ maquina }}">{{ maquina }}
+                            </label>
                         </div>
+                        {% endfor %}
                     </div>
-                {% endfor %}
-            </div>
-            <div class="d-flex justify-content-end">
-                <input type="submit" class="btn btn-outline-success" id="btnGravar" value="Enviar" tabindex="9">
-            </div>
-        </form>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="d-flex justify-content-end">
+            <input type="button" class="btn btn-outline-success" id="btnEnviarMen" value="Enviar" tabindex="9">
+        </div>
     </div>
 </section>
 <section class="modal-alert d-none" id="modal-alert">
@@ -55,30 +46,42 @@
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">Aviso</h5>
             </div>
-            <div class="alert" id="alert-modal" style="display: none; margin-left: 1rem; margin-right: 1rem; margin-top: 1rem;" role="alert">
-            </div>
             <div class="modal-body overflow-scroll">
                 <div class="container">
                     <div class="row">
-                        <div class="col-3">
+                        <div class="col-3" id="icone">
                             <i class="fa-solid fa-circle-check" style="font-size: 4rem; color: #008000;"></i>
                         </div>
-                        <div class="col">
+                        <div class="col" id="texto">
                             <h4 style="font-size: 17px;">Mensagem enviada com sucesso!</h4>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-outline-success" id="btnEnviarMen">OK</button>
+                <button type="button" class="btn btn-outline-success" id="btnOK">OK</button>
             </div>
         </div>
     </div>
 </section>
+{% endblock %}
 {% block script %}
 <script>
+    function mostrarMaquinas(div, botao){
+        if (div.style.display == "none") {
+            div.style.display = "block";
+            botao.innerHTML = "";
+            botao.innerHTML = '<i class="fa-solid fa-sort-down"></i></i>';
+        }else{
+            div.style.display = "none";
+            botao.innerHTML = "";
+            botao.innerHTML = '<i class="fa-solid fa-caret-right"></i>';
+        }
+    }
+</script>
+<script>
     $(document).ready(function(){
-        $("#btnEnviarMen").click(function(){
+        $("#btnOK").click(function(){
             $("#modal-alert").addClass("d-none");
         })
     })
@@ -105,50 +108,59 @@
     }
 </script>
 <script>
-    let isSubmitting = false;
+    $(document).ready(function(){
+        $("#btnEnviarMen").click(function(){
+            const inputsData = [];
+            const div = document.getElementById("maquinas");
+            const inputs = div.querySelectorAll('input[id^="maq_"]');
+            let mensagem = document.getElementById("mensagem").value;
 
-    document.getElementById('formMensagem').addEventListener('submit', function(event) {
-        event.preventDefault(); // Previne a submissão padrão do formulário
-        if (!isSubmitting) { // Verifica se já não está sendo submetido
-            isSubmitting = true; // Ativa a variável para evitar novas submissões
-            enviarFormulario(event.target);
-        }
-    });
+            inputs.forEach((input) => {
+                if (input.checked){
+                    inputsData.push(input.value);
+                }
+            });
 
-    function enviarFormulario(form){
-        const inputsData = [];
-        const div = document.getElementById("maquinas");
-        const inputs = div.querySelectorAll('input[id^="maq_"]');
+            var url = "{{url_for('mensagemAdmBlue.sendMensagem')}}";
 
-        inputs.forEach((input) => {
-            console.log(input);
-            if (input.checked){
-                inputsData.push(input.value);
-            }
-        });
-
-        var url = "{{url_for('mensagemAdmBlue.sendMensagem')}}"
-
-        $.ajax({
-            url: url,
-            type: 'POST',
-            async: false,
-            dataType: 'json',
-            contentType: 'application/json;charset=UTF-8',
-            data:JSON.stringify({
-                mensagem: $("#mensagem").val(), 
-                destinos: inputsData,
-            }), 
-            success: function(resp){
-                isSubmitting = false;
+            if (mensagem.trim().length < 1){
+                $("#icone").empty();
+                $("#texto").empty();
+                $("#icone").append('<i class="fa-solid fa-circle-exclamation" style="font-size: 4rem; color: #b60101;"></i>');
+                $("#texto").append('<h4 style="font-size: 17px;">Preencha o campo da mensagem!</h4>');
                 $("#modal-alert").removeClass("d-none");
-            },
-            error: function(resp){
-                window.location = '/error_500';
-                isSubmitting = false;
+                $("#mensagem").focus();
+            }else if (inputsData.length < 1){
+                $("#icone").empty();
+                $("#texto").empty();
+                $("#icone").append('<i class="fa-solid fa-circle-exclamation" style="font-size: 4rem; color: #b60101;"></i>');
+                $("#texto").append('<h4 style="font-size: 17px;">Por favor, selecione uma máquina de destino!</h4>');
+                $("#modal-alert").removeClass("d-none");
+                $("#todos").focus();
+            }else{
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    async: false,
+                    dataType: 'json',
+                    contentType: 'application/json;charset=UTF-8',
+                    data:JSON.stringify({
+                        mensagem: $("#mensagem").val(), 
+                        destinos: inputsData,
+                    }), 
+                    success: function(resp){
+                        $("#icone").empty();
+                        $("#texto").empty();
+                        $("#icone").append('<i class="fa-solid fa-circle-check" style="font-size: 4rem; color: #008000;"></i>');
+                        $("#texto").append('<h4 style="font-size: 17px;">Mensagem enviada com sucesso!</h4>');
+                        $("#modal-alert").removeClass("d-none");
+                    },
+                    error: function(resp){
+                        window.location = '/error_500';
+                    }
+                });
             }
-        });
-    }
+        })
+    })
 </script>
-{% endblock %}
 {% endblock %}
