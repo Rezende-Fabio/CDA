@@ -1,8 +1,8 @@
 {% extends "public/base.html" %}
-{% block content %}
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styleMensagem.css') }}">
 {% endblock %}
+{% block content %}
 {% include "public/header.html" %}
 <section class="content" style="overflow-x: hidden;">
     <div class="container-fluid p-2">
@@ -12,29 +12,46 @@
                 <textarea class="form-control upper" maxlength="253" autofocus style="height: 100px" name="mensagem" id="mensagem" cols="15" rows="10"></textarea>
             </div>
         </div>
-        <div class="form-check form-check-inline mb-2">
-            <label for="todos">Todos </label>
-            <input class="form-check-input" type="checkbox" id="todos" onchange="marcaTodosCheck()">
-        </div>
-        <div class="row mb-2" id="maquinas">
-            {% for grupo in context.grupos.grupos %}
-                <div class="d-flex ms-3 ps-3">
-                    <label for="master_{{ grupo.nome }}">{{ grupo.nome }}</label> <a class="btn-mostrar" onclick="mostrarMaquinas({{ grupo.nome }}, this)"><i class="fa-solid fa-caret-right"></i></a>
-                    <input class="form-check-input" type="checkbox" id="master_{{ grupo.nome }}" onchange="marcaCheck({{ grupo.nome }}, '{{ grupo.nome }}')">
+        <div class="card">
+            <div class="card-header">
+                <div style="display: flex; justify-content: space-between; margin-left: 1rem;">
+                    <label for="">Todos </label>
+                    <input class="form-check-input" type="checkbox" id="todos" onchange="marcaTodosCheck()">
                 </div>
-                <div class="col mb-4 ms-3" id="{{ grupo.nome }}" style="display: none;">
-                    <div class="checkbox-group">
-                        {% for maquina in grupo.maquinas  %}
-                        <div class="checkbox-item">
-                            <label class="check-maquina">
-                                <input class="form-check-input" type="checkbox" id="maq_{{ maquina }}" value="{{ maquina }}">{{ maquina }}
-                            </label>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            {% endfor %}
-        </div>
+            </div>
+            <div class="card-body p-0">
+              <table class="table table-hover" id="maquinas">
+                <tbody>
+                    {% for grupo in context.grupos.grupos %}
+                        <tr data-widget="expandable-table" aria-expanded="false">
+                            <td colspan="15">
+                                <input class="form-check-input" type="checkbox" id="master_{{ grupo.nome }}" onchange="marcaCheck({{ grupo.nome }}, '{{ grupo.nome }}')">
+                                <label for="">{{ grupo.nome }}</label>
+                                <i class="expandable-table-caret fas fa-caret-right fa-fw"></i>
+                            </td>
+                        </tr>
+                        <tr class="expandable-body" id="{{ grupo.nome }}">
+                            <td>
+                                <div class="pl-2">
+                                    <table class="table table-hover">
+                                        <tbody>
+                                            {% for maquina in grupo.maquinas %}  
+                                                <tr>
+                                                    <td>
+                                                        <input class="form-check-input" type="checkbox" id="maq_{{ maquina }}" value="{{ maquina }}"><label for="maq_{{ maquina }}" style="font-weight: 400;">{{ maquina }}</label>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
         <div class="d-flex justify-content-end">
             <input type="button" class="btn btn-outline-success" id="btnEnviarMen" value="Enviar" tabindex="9">
         </div>
