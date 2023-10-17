@@ -18,7 +18,7 @@ def function_shell(app):
 
 def insereParametros():
     DB.session.execute("""
-            INSERT INTO public.cda015
+            INSERT INTO cda015
             (par_codigo, par_valor, par_desc)
             VALUES
                 ('PAR_MANUT_CONTROL_CHAV', '12', 'Parâmetro para delimitar a data de consulta na tabela de manutenção de movimento de chaves'),

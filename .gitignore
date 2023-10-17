@@ -11,3 +11,4 @@ __pycache__
 plugins
 wkhtmltopdf
 settings.toml
+*.log
